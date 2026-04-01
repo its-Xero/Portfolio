@@ -28,13 +28,48 @@ import './Home.css';
  *  - Add a new object to the `skills` array below
  */
 
-const projects = [
+const developerProjects = [
+  {
+    id: 1,
+    label: 'GitHub Repo',
+    title: 'Project-BI',
+    description: 'University project, subject is Business Intelligence, all built using Python.',
+    tags: ['Python', 'BI', 'Data'],
+    link: 'https://github.com/its-Xero/Project-BI',
+  },
+  {
+    id: 2,
+    label: 'GitHub Repo',
+    title: 'UNO-Business',
+    description: 'This project was made for a client that needed a personalized java.swing library to create a uno game GUI.',
+    tags: ['Java', 'Swing'],
+    link: 'https://github.com/its-Xero/UNO-Business',
+  },
+  {
+    id: 3,
+    label: 'GitHub Repo',
+    title: 'faculty-webapp',
+    description: 'Faculty students management web application programmed with Express.js, React.js, and SQL.',
+    tags: ['React', 'Express', 'SQL'],
+    link: 'https://github.com/its-Xero/faculty-webapp',
+  },
+  {
+    id: 4,
+    label: 'GitHub Repo',
+    title: 'senaNova & TP-WEB-DEV',
+    description: 'Various labs, academic work, and independent explorations in web-dev and python.',
+    tags: ['Web Dev', 'Python', 'Labs'],
+    link: 'https://github.com/its-Xero?tab=repositories',
+  }
+];
+
+const designerProjects = [
   {
     id: 1,
     label: 'Case Study 01',
     title: 'Bloom Dashboard',
     description: 'Health metric visualization using layered surfaces, ambient lighting, and the no-line separation principle.',
-    tags: ['React', 'D3.js', 'Design System'],
+    tags: ['Figma', 'UI/UX', 'Design System'],
     link: '#',
   },
   {
@@ -42,7 +77,7 @@ const projects = [
     label: 'Case Study 02',
     title: 'Celestial Nexus',
     description: 'A premium portfolio experience built on glassmorphism, intentional asymmetry, and liquid motion design.',
-    tags: ['Vite', 'CSS Architecture', 'Motion'],
+    tags: ['Web Design', 'Motion', 'Prototyping'],
     link: '#',
   },
   {
@@ -50,7 +85,7 @@ const projects = [
     label: 'Case Study 03',
     title: 'GlycoPal',
     description: 'Mobile health companion app with dynamic theming, real-time data logging, and personalized insights.',
-    tags: ['React Native', 'Expo', 'TypeScript'],
+    tags: ['Mobile UX', 'User Testing', 'Wireframing'],
     link: '#',
   },
 ];
@@ -62,7 +97,10 @@ const skills = [
   { icon: Sparkles, title: 'Motion & Polish', description: 'Crafting micro-interactions and animations that elevate the user experience.' },
 ];
 
-const Home = () => {
+const Home = ({ role = 'developer' }) => {
+  const isDev = role === 'developer';
+  const projects = isDev ? developerProjects : designerProjects;
+  
   const workReveal = useScrollReveal();
   const aboutReveal = useScrollReveal();
   const skillsReveal = useScrollReveal();
@@ -81,14 +119,14 @@ const Home = () => {
           <div className="radial-glow hero-glow" />
 
           <div className="container hero-content">
-            <span className="label hero-label reveal reveal-delay-1">Portfolio · 2026</span>
+            <span className="label hero-label reveal reveal-delay-1">{isDev ? 'Developer Workflow · 2026' : 'Designer Nexus · 2026'}</span>
             <h1 className="hero-title display reveal reveal-delay-2">
-              Digital<br />Architect's<br />Void.
+              {isDev ? <>Digital<br />Architect's<br />Void.</> : <>Creative<br />Nexus<br />Space.</>}
             </h1>
             <p className="hero-subtitle reveal reveal-delay-3">
-              Not a flat canvas, but a deep multidimensional space. 
-              Designing interfaces that feel like a liquid environment — 
-              smooth, frictionless, and premium.
+              {isDev
+                ? "Not just code, but systematic logic. Architecting scalable, robust software solutions that solve complex problems intelligently."
+                : "Not a flat canvas, but a deep multidimensional space. Designing interfaces that feel like a liquid environment — smooth, frictionless, and premium."}
             </p>
             <div className="hero-actions reveal reveal-delay-4">
               <Button variant="primary" href="#work">

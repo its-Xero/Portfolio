@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 /**
@@ -37,10 +38,13 @@ const Navbar = () => {
     <>
       <nav className={`navbar glass ${scrolled ? 'navbar-scrolled' : ''}`}>
         <div className="navbar-inner">
-          <a href="#" className="navbar-logo display">NX.</a>
+          <Link to="/" className="navbar-logo display">NX.</Link>
 
           {/* Desktop links */}
           <ul className="navbar-links">
+            <li>
+              <Link to="/" className="switch-mode-btn"><ArrowLeft size={16} /> Switch Mode</Link>
+            </li>
             {links.map((link) => (
               <li key={link.href}>
                 <a href={link.href}>{link.label}</a>
@@ -62,8 +66,13 @@ const Navbar = () => {
       {/* Mobile overlay */}
       <div className={`mobile-menu glass ${mobileOpen ? 'mobile-menu-open' : ''}`}>
         <ul className="mobile-menu-links">
+          <li style={{ animationDelay: '0s' }}>
+            <Link to="/" onClick={handleLinkClick}>
+              Switch Mode
+            </Link>
+          </li>
           {links.map((link, i) => (
-            <li key={link.href} style={{ animationDelay: `${i * 0.08}s` }}>
+            <li key={link.href} style={{ animationDelay: `${(i + 1) * 0.08}s` }}>
               <a href={link.href} onClick={handleLinkClick}>
                 {link.label}
               </a>

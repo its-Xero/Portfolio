@@ -1,0 +1,223 @@
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg);
+}
+
+@media (min-width: 768px) {
+  .landing-container {
+    flex-direction: row;
+  }
+}
+
+.door {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+/* Backgrounds & Hover Expansions */
+.developer-door {
+  background: rgba(10, 10, 12, 0.6);
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.designer-door {
+  background: rgba(15, 12, 17, 0.6);
+}
+
+@media (min-width: 768px) {
+  .door:hover {
+    flex: 1.15;
+  }
+  .developer-door:hover ~ .designer-door {
+    flex: 0.85;
+  }
+}
+
+/* Glow Elements */
+.dev-glow {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+  width: 800px;
+  height: 800px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.developer-door:hover .dev-glow {
+  opacity: 1;
+}
+
+.deg-glow {
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, transparent 60%);
+  width: 800px;
+  height: 800px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.designer-door:hover .deg-glow {
+  opacity: 1;
+}
+
+/* Content Setup */
+.door-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem;
+  transform: translateY(20px);
+  opacity: 0.8;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.door:hover .door-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.door-icon-wrapper {
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 1.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s ease;
+  margin-bottom: 1rem;
+}
+
+.developer-door:hover .door-icon-wrapper {
+  color: #818cf8;
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.2);
+  transform: scale(1.1);
+}
+
+.designer-door:hover .door-icon-wrapper {
+  color: #f472b6;
+  border-color: rgba(236, 72, 153, 0.3);
+  box-shadow: 0 0 40px rgba(236, 72, 153, 0.2);
+  transform: scale(1.1);
+}
+
+.door-title {
+  margin: 0;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  letter-spacing: -0.02em;
+}
+
+.door-desc {
+  color: var(--text-muted);
+  font-size: 1.125rem;
+  margin: 0;
+  max-width: 280px;
+}
+
+/* Call to Action Button */
+.door-btn {
+  margin-top: 1rem;
+  padding: 0.75rem 2rem;
+  background: var(--surface-light);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.developer-door .door-btn:hover {
+  background: var(--text);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.designer-door .door-btn:hover {
+  background: var(--text);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Center Divider */
+.landing-divider {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .landing-divider {
+    flex-direction: row;
+    width: 80%;
+  }
+}
+
+@media (min-width: 768px) {
+  .landing-divider {
+    flex-direction: column;
+    height: 80%;
+  }
+}
+
+.divider-line {
+  background: var(--border);
+  opacity: 0.5;
+}
+
+@media (max-width: 767px) {
+  .divider-line {
+    height: 1px;
+    flex: 1;
+  }
+}
+
+@media (min-width: 768px) {
+  .divider-line {
+    width: 1px;
+    flex: 1;
+  }
+}
+
+.divider-text {
+  background: var(--surface);
+  color: var(--text-muted);
+  padding: 0.5rem 1rem;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  margin: 1rem;
+}
