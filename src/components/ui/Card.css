@@ -1,12 +1,19 @@
+/* ═══════════════════════════════════════════════════
+   CARD — Layered Surface Approach
+   NO explicit borders (the No-Line rule)
+   ═══════════════════════════════════════════════════ */
+
 .card {
   background-color: var(--color-surface-container-high);
   border-radius: var(--radius-xl);
-  padding: 2.5rem;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
   overflow: hidden;
   position: relative;
-  /* Ambient shadow */
   box-shadow: var(--shadow-ambient);
-  /* NO BORDERS rule */
+  transition:
+    transform var(--duration-slow) var(--ease-smooth),
+    background-color var(--duration-slow) var(--ease-smooth),
+    box-shadow var(--duration-slow) var(--ease-smooth);
 }
 
 .card-interactive {
@@ -14,6 +21,13 @@
 }
 
 .card-interactive:hover {
-  transform: scale(1.02);
+  transform: scale(1.02) translateY(-4px);
   background-color: var(--color-surface-bright);
+  box-shadow: var(--shadow-elevated);
+}
+
+.card-glow:hover {
+  box-shadow:
+    var(--shadow-elevated),
+    0 0 40px rgba(190, 134, 255, 0.06);
 }

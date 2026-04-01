@@ -1,0 +1,24 @@
+/* ═══════════════════════════════════════════════════
+   SECTION HEADER
+   ═══════════════════════════════════════════════════ */
+
+.section-header {
+  margin-bottom: var(--spacing-12);
+}
+
+.section-header-center {
+  text-align: center;
+}
+
+.section-label {
+  display: inline-block;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-4);
+  font-size: var(--text-label-sm);
+}
+
+.section-title {
+  font-size: var(--text-display-md);
+  color: var(--color-on-surface);
+  line-height: 1.1;
+}
