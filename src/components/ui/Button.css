@@ -1,0 +1,35 @@
+.btn {
+  padding: 1rem 2rem;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: var(--text-label-md);
+  /* The "Magnetic" Hover base transition is in globals.css (.transition-smooth), 
+     but we also apply general transition here. */
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary {
+  background-color: var(--color-primary-fixed);
+  color: var(--color-on-primary-container);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-fixed);
+  box-shadow: 0 0 20px var(--color-primary-fixed); /* glow effect */
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-on-surface);
+  /* Ghost border at 15% opacity */
+  box-shadow: inset 0 0 0 1px rgba(59, 72, 97, 0.15); 
+}
+
+.btn-secondary:hover {
+  background-color: rgba(200, 153, 255, 0.1); /* 10% primary */
+}

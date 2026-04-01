@@ -1,0 +1,44 @@
+:root {
+  /* Colors - The Celestial Nexus */
+  --color-surface: #010e24;
+  --color-surface-container: #061934;
+  --color-surface-container-low: #02132b;
+  --color-surface-container-lowest: #000000;
+  --color-surface-container-high: #0b203d;
+  --color-surface-bright: #152c4e;
+  --color-surface-variant: #102645;
+  
+  --color-primary: #c899ff;
+  --color-primary-fixed: #be86ff;
+  --color-primary-container: #be86ff;
+  --color-on-primary-container: #340064;
+  
+  --color-on-surface: #dbe6ff;
+  
+  --color-outline: #687690;
+  --color-outline-variant: #3b4861;
+  
+  /* Typography Variables */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Manrope', sans-serif;
+  --font-label: 'Plus Jakarta Sans', sans-serif;
+  
+  /* Shadow Variables for Ambient Lighting */
+  --shadow-ambient: 0px 10px 40px rgba(1, 14, 36, 0.4), 0px 20px 60px rgba(200, 153, 255, 0.05);
+  --shadow-glow: 0px 0px 20px rgba(190, 134, 255, 0.4);
+
+  /* Border Radii */
+  --radius-full: 9999px;
+  --radius-xl: 0.75rem;
+
+  /* Font Scaling */
+  --text-display-lg: 3.5rem;
+  --text-display-md: 2.25rem;
+  --text-body-lg: 1rem;
+  --text-label-md: 0.875rem;
+  --text-label-sm: 0.6875rem;
+
+  /* Spacing */
+  --spacing-4: 1.4rem;
+  --spacing-24: 8.5rem;
+}

@@ -1,0 +1,49 @@
+/* 
+  Navigation (The Floating Bar)
+  - Not anchored to the exact top, it floats.
+  - Styles inherit from the .glass utility in globals.css.
+*/
+
+.navbar-island {
+  position: fixed;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-radius: var(--radius-full);
+  z-index: 100;
+  /* Ambient glow effect */
+  box-shadow: 0 10px 40px rgba(1, 14, 36, 0.4);
+}
+
+.navbar-logo {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: var(--color-on-surface);
+  transition: color 0.3s ease;
+  font-size: var(--text-label-md);
+}
+
+.nav-links a:hover {
+  color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* In a real app, you would add a hamburger menu */
+  }
+}

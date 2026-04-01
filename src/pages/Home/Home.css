@@ -1,0 +1,101 @@
+.home-container {
+  position: relative;
+  min-height: 100vh;
+  z-index: 1;
+}
+
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  padding-top: 15rem; /* space for navbar + hero */
+}
+
+/* --- Hero Section --- */
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: var(--spacing-24);
+  max-width: 800px;
+}
+
+.hero-title {
+  font-size: var(--text-display-lg);
+  line-height: 1.1;
+  color: var(--color-on-surface);
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--color-outline);
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* --- Work Section --- */
+.work-section {
+  padding-bottom: var(--spacing-24);
+}
+
+.section-title {
+  font-size: var(--text-display-md);
+  margin-bottom: var(--spacing-4);
+  color: var(--color-on-surface);
+}
+
+/* Project cards specifics */
+.project-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.project-title {
+  font-size: 2rem;
+}
+
+.project-desc {
+  color: var(--color-outline);
+  font-size: var(--text-body-lg);
+}
+
+/* The Intentional Asymmetry utility offset */
+.mt-offset {
+  margin-top: 0;
+}
+
+@media (min-width: 768px) {
+  .mt-offset {
+    margin-top: 6rem;
+  }
+}
+
+/* Responsiveness adjustments */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  .main-content {
+    padding-top: 10rem;
+  }
+  .hero-actions {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,19 @@
+.card {
+  background-color: var(--color-surface-container-high);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  overflow: hidden;
+  position: relative;
+  /* Ambient shadow */
+  box-shadow: var(--shadow-ambient);
+  /* NO BORDERS rule */
+}
+
+.card-interactive {
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  transform: scale(1.02);
+  background-color: var(--color-surface-bright);
+}
