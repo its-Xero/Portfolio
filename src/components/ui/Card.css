@@ -10,6 +10,9 @@
   overflow: hidden;
   position: relative;
   box-shadow: var(--shadow-ambient);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   transition:
     transform var(--duration-slow) var(--ease-smooth),
     background-color var(--duration-slow) var(--ease-smooth),

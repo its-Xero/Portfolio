@@ -69,11 +69,17 @@
   .projects-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-8);
+    padding-bottom: var(--spacing-16); /* accommodate stagger overflow */
   }
 
-  /* Intentional Asymmetry: offset odd cards */
+  /* Intentional Asymmetry: offset odd cards visually without breaking grid flow */
   .project-card-odd {
-    margin-top: var(--spacing-16);
+    transform: translateY(var(--spacing-16));
+  }
+
+  /* Preserve stagger offset during hover animation */
+  .project-card-odd.card-interactive:hover {
+    transform: translateY(calc(var(--spacing-16) - 4px)) scale(1.02);
   }
 }
 
@@ -87,6 +93,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-6);
+  height: 100%; /* ensure cards fill their grid cell */
 }
 
 .project-card-top {
