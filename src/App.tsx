@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowUpRight, Twitter, Linkedin, Dribbble } from "lucide-react";
+import { ArrowUpRight, ArrowLeft, Linkedin, Instagram } from "lucide-react";
 
 /* ─── constants ─────────────────────────────────────────────────────────── */
 
@@ -49,38 +49,117 @@ const PROJECTS = [
   },
 ];
 
+/* All 8 projects shown on the full projects page */
+const ALL_PROJECTS = [
+  {
+    title: "Social Campaign — Apparel",
+    category: "Social Media",
+    year: "2026",
+    description: "A full editorial Instagram campaign for a streetwear label — grid layout, story templates, and motion cover assets.",
+    image: "/assets/e37ca59c98504c97b809f6b0573114c4c632b984.png",
+    alt: "Fashion editorial campaign — woman in black blazer",
+  },
+  {
+    title: "Packaging Design — Cosmetics",
+    category: "Packaging",
+    year: "2025",
+    description: "End-to-end packaging system for a luxury skincare brand: structural design, typography, and material specification.",
+    image: "/assets/e89add6920e3dd49952dd44946b71060231dc239.png",
+    alt: "Luxury cosmetics packaging arranged on dark surface",
+  },
+  {
+    title: "Mobile UI — Wellness App",
+    category: "UI/UX",
+    year: "2025",
+    description: "Dark-mode interface for a mindfulness and sleep tracking app, with a custom design system and component library.",
+    image: "/assets/d64d7fc4ca830da17517830e3cdf0df88503b923.png",
+    alt: "Dark mode wellness mobile app on device",
+  },
+  {
+    title: "Brand Identity System",
+    category: "Branding",
+    year: "2024",
+    description: "Complete visual identity for a boutique creative studio — logo, color system, type hierarchy, and usage guidelines.",
+    image: "/assets/255f15408d482942a3a822b169bfce077684d2ba.png",
+    alt: "Brand identity business cards on dark surface",
+  },
+  {
+    title: "E-Commerce Redesign",
+    category: "UI/UX",
+    year: "2026",
+    description: "Full product page and checkout flow redesign for a fashion retailer, improving conversion with a premium dark editorial feel.",
+    image: "/assets/ad274ce3097e7f44c8e612c6b3373139aa329cc3.png",
+    alt: "Dark editorial fashion on monitor",
+  },
+  {
+    title: "Skincare Line — Packaging",
+    category: "Packaging",
+    year: "2025",
+    description: "Packaging system for a clinical skincare line — minimalist, medical-grade aesthetic with tactile finish specification.",
+    image: "/assets/1e9c51112cd6e93ff24da608ca5e63dbc793e534.png",
+    alt: "Skincare and design workspace",
+  },
+  {
+    title: "Festival Visual Identity",
+    category: "Branding",
+    year: "2025",
+    description: "Full visual identity for an electronic music festival: poster series, stage graphics, social assets, and wayfinding.",
+    image: "/assets/3b8d1031640f6c622f117ccc3cea45e112591b6b.png",
+    alt: "Abstract dark atmospheric visual",
+  },
+  {
+    title: "Analytics Dashboard UI",
+    category: "UI/UX",
+    year: "2024",
+    description: "Data visualization dashboard for a SaaS product — custom chart components, dark theme, and a scalable token system.",
+    image: "/assets/1cf3b2887c18b0244b46bc1196b22f85f0510414.png",
+    alt: "Dark design workspace with monitors",
+  },
+];
+
+const CATEGORIES = ["All", "UI/UX", "Social Media", "Packaging", "Branding"];
+
+const LINKEDIN_URL = "https://www.linkedin.com/in/anes-ragoub/";
+const INSTAGRAM_URL = "https://www.instagram.com/xero._.design/";
+const BEHANCE_URL = "https://www.behance.net/AnesRagoub";
+const FIGMA_URL = "https://www.figma.com/design/nCno1YvHqW9zp6sZMeHXR0/Portfolio?node-id=1-18275&t=wP3j4GMWRa3icm91-1";
+
 const JOURNAL = [
   {
     title: "Building a Social Media Design System from Scratch",
     excerpt: "How I systematized a chaotic workflow into a scalable visual library.",
-    readTime: "5 min read",
+    readTime: "LinkedIn post",
     date: "May 2026",
     image: "/assets/1cf3b2887c18b0244b46bc1196b22f85f0510414.png",
     alt: "Dark design workspace with monitors",
+    url: LINKEDIN_URL,
   },
   {
     title: "Why Packaging Design Is Just UI for Physical Products",
     excerpt: "The surprising overlap between screen interfaces and shelf presence.",
-    readTime: "4 min read",
+    readTime: "LinkedIn post",
     date: "April 2026",
     image: "/assets/5555a4b9a9c5e8b522b2f76d20619d5025f0f728.png",
     alt: "Close-up of cosmetics on a dark table",
+    url: LINKEDIN_URL,
   },
   {
     title: "The Invisible Rules Behind Every Great Instagram Grid",
     excerpt: "Color blocking, rhythm, and the silent grammar of visual feeds.",
-    readTime: "3 min read",
+    readTime: "LinkedIn post",
     date: "March 2026",
     image: "/assets/1e9c51112cd6e93ff24da608ca5e63dbc793e534.png",
     alt: "Dual monitors displaying design work",
+    url: LINKEDIN_URL,
   },
   {
     title: "When Brand Guidelines Actually Help You Move Faster",
     excerpt: "Constraints as creative catalysts — a counterintuitive take.",
-    readTime: "6 min read",
+    readTime: "LinkedIn post",
     date: "February 2026",
     image: "/assets/e884c48f9aada005309bdb7000cda06250ba250b.png",
     alt: "Designer workspace with brand materials",
+    url: LINKEDIN_URL,
   },
 ];
 
@@ -287,9 +366,275 @@ function ProjectCard({
   );
 }
 
+/* ─── all projects page ─────────────────────────────────────────────────── */
+
+function AllProjectsPage({ onBack }: { onBack: () => void }) {
+  const [activeFilter, setActiveFilter] = useState("All");
+
+  const filtered =
+    activeFilter === "All"
+      ? ALL_PROJECTS
+      : ALL_PROJECTS.filter((p) => p.category === activeFilter);
+
+  return (
+    <div
+      style={{
+        background: C.bg,
+        color: C.text,
+        fontFamily: "Inter, sans-serif",
+        minHeight: "100vh",
+        animation: "fadeIn 0.4s ease both",
+      }}
+    >
+      {/* ── sticky top bar ── */}
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+          borderBottom: `1px solid ${C.border}`,
+          background: "rgba(10,10,10,0.90)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          padding: "16px 40px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <button className="back-btn" onClick={onBack}>
+          <ArrowLeft size={14} />
+          Back to portfolio
+        </button>
+
+        <GradientRing>
+          <div
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: "50%",
+              background: C.bg,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'Instrument Serif', serif",
+                fontStyle: "italic",
+                fontSize: "12px",
+                color: C.text,
+              }}
+            >
+              AR
+            </span>
+          </div>
+        </GradientRing>
+      </div>
+
+      {/* ── page header ── */}
+      <div style={{ padding: "80px 40px 56px", maxWidth: 1280, margin: "0 auto" }}>
+        <Eyebrow label="Portfolio" />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            flexWrap: "wrap",
+            gap: 24,
+          }}
+        >
+          <h1 style={{ margin: 0, lineHeight: 1.0 }}>
+            <span
+              style={{
+                display: "block",
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 300,
+                fontSize: "clamp(40px, 6vw, 72px)",
+                color: C.text,
+              }}
+            >
+              All
+            </span>
+            <em
+              style={{
+                display: "block",
+                fontFamily: "'Instrument Serif', serif",
+                fontStyle: "italic",
+                fontSize: "clamp(40px, 6vw, 72px)",
+                color: C.text,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              projects.
+            </em>
+          </h1>
+          <p style={{ color: C.muted, fontSize: "14px", maxWidth: 360, lineHeight: 1.75, margin: 0 }}>
+            {ALL_PROJECTS.length} projects across UI/UX design, social media campaigns, packaging
+            systems, and brand identity.
+          </p>
+        </div>
+
+        {/* category filters */}
+        <div style={{ display: "flex", gap: 8, marginTop: 48, flexWrap: "wrap" }}>
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              className={`filter-pill ${activeFilter === cat ? "active" : ""}`}
+              onClick={() => setActiveFilter(cat)}
+            >
+              {cat}
+              {cat !== "All" && (
+                <span style={{ marginLeft: 6, color: C.muted, fontSize: "11px" }}>
+                  {ALL_PROJECTS.filter((p) => p.category === cat).length}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        <div style={{ marginTop: 16, color: C.muted, fontSize: "12px", letterSpacing: "0.08em" }}>
+          Showing {filtered.length} of {ALL_PROJECTS.length}
+        </div>
+      </div>
+
+      {/* ── projects grid ── */}
+      <div style={{ padding: "0 40px 120px", maxWidth: 1280, margin: "0 auto" }}>
+        <div
+          className="all-projects-grid"
+          style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}
+        >
+          {filtered.map((project, i) => (
+            <div
+              key={project.title}
+              style={{ animation: `fadeUp 0.5s ease ${i * 0.07}s both` }}
+            >
+              {/* reuse the same card but without requiring `index` */}
+              <div
+                style={{
+                  position: "relative",
+                  background: C.surface,
+                  border: `1px solid ${C.border}`,
+                  borderRadius: 24,
+                  overflow: "hidden",
+                  minHeight: 320,
+                  cursor: "pointer",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.querySelector("img")!.style.transform = "scale(1.06)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.querySelector("img")!.style.transform = "scale(1)")
+                }
+              >
+                <img
+                  src={project.image}
+                  alt={project.alt}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    transition: "transform 0.65s cubic-bezier(0.25,0.46,0.45,0.94)",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.35) 1px, transparent 1px)",
+                    backgroundSize: "7px 7px",
+                    pointerEvents: "none",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    padding: "28px 24px 20px",
+                    background: "linear-gradient(to top, rgba(10,10,10,0.92) 0%, transparent 100%)",
+                  }}
+                >
+                  <div
+                    style={{
+                      color: C.muted,
+                      fontSize: "10px",
+                      letterSpacing: "0.15em",
+                      textTransform: "uppercase",
+                      marginBottom: 5,
+                    }}
+                  >
+                    {project.category} · {project.year}
+                  </div>
+                  <div
+                    style={{ color: C.text, fontSize: "15px", fontWeight: 500, fontFamily: "Inter, sans-serif" }}
+                  >
+                    {project.title}
+                  </div>
+                </div>
+              </div>
+              {/* description below card */}
+              <div style={{ padding: "14px 4px 0" }}>
+                <p style={{ color: C.muted, fontSize: "13px", lineHeight: 1.7, margin: 0 }}>
+                  {project.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {filtered.length === 0 && (
+          <div style={{ textAlign: "center", padding: "100px 0", color: C.muted }}>
+            <em
+              style={{
+                fontFamily: "'Instrument Serif', serif",
+                fontStyle: "italic",
+                fontSize: "32px",
+                display: "block",
+                marginBottom: 12,
+              }}
+            >
+              Nothing here yet.
+            </em>
+            <span style={{ fontSize: "14px" }}>More work coming soon.</span>
+          </div>
+        )}
+      </div>
+
+      {/* ── footer strip ── */}
+      <div
+        style={{
+          borderTop: `1px solid ${C.border}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "20px 40px",
+          flexWrap: "wrap",
+          gap: 14,
+        }}
+      >
+        <span style={{ color: C.muted, fontSize: "12px" }}>© 2026 Anes Ragoub. All rights reserved.</span>
+        <button
+          className="back-btn"
+          onClick={onBack}
+          style={{ padding: "8px 16px", fontSize: "12px" } as React.CSSProperties}
+        >
+          <ArrowLeft size={12} />
+          Back to portfolio
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /* ─── main component ────────────────────────────────────────────────────── */
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState<"home" | "projects">("home");
   const [isLoading, setIsLoading] = useState(true);
   const [counter, setCounter] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
@@ -297,6 +642,15 @@ export default function App() {
   const [activeNav, setActiveNav] = useState("Home");
   const [roleIndex, setRoleIndex] = useState(0);
   const [roleVisible, setRoleVisible] = useState(true);
+
+  const goToProjects = () => {
+    setCurrentPage("projects");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const goHome = () => {
+    setCurrentPage("home");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   /* loading counter */
   useEffect(() => {
@@ -438,6 +792,52 @@ export default function App() {
             />
           </div>
         </div>
+      </>
+    );
+  }
+
+  /* ── PROJECTS PAGE ── */
+  if (currentPage === "projects") {
+    return (
+      <>
+        <style>{`
+          *, *::before, *::after { box-sizing: border-box; }
+          html { scroll-behavior: smooth; }
+          body { margin: 0; background: #0A0A0A; overflow-x: hidden; }
+          ::-webkit-scrollbar { width: 0; }
+          @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+          }
+          .filter-pill {
+            padding: 8px 20px; border-radius: 9999px; border: 1px solid #1F1F1F;
+            background: transparent; color: #878787; font-size: 13px;
+            font-family: Inter, sans-serif; cursor: pointer;
+            transition: all 0.2s ease; white-space: nowrap;
+          }
+          .filter-pill:hover { color: #F5F5F5; border-color: #333; }
+          .filter-pill.active {
+            color: #F5F5F5; border-color: transparent;
+            background: linear-gradient(#141414, #141414) padding-box,
+                        linear-gradient(135deg, #89AACC, #4E85BF) border-box;
+          }
+          .back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 20px; border-radius: 9999px; border: 1px solid #1F1F1F;
+            background: transparent; color: #878787; font-size: 13px;
+            font-family: Inter, sans-serif; cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+          }
+          .back-btn:hover { color: #F5F5F5; border-color: #333; }
+          @media (max-width: 900px) {
+            .all-projects-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
+        <AllProjectsPage onBack={goHome} />
       </>
     );
   }
@@ -602,6 +1002,48 @@ export default function App() {
           transform: scale(1.04);
         }
 
+        .filter-pill {
+          padding: 8px 20px;
+          border-radius: 9999px;
+          border: 1px solid #1F1F1F;
+          background: transparent;
+          color: #878787;
+          font-size: 13px;
+          font-family: Inter, sans-serif;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          white-space: nowrap;
+        }
+        .filter-pill:hover { color: #F5F5F5; border-color: #333; }
+        .filter-pill.active {
+          color: #F5F5F5;
+          border-color: transparent;
+          background:
+            linear-gradient(#141414, #141414) padding-box,
+            linear-gradient(135deg, #89AACC, #4E85BF) border-box;
+        }
+
+        .back-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 20px;
+          border-radius: 9999px;
+          border: 1px solid #1F1F1F;
+          background: transparent;
+          color: #878787;
+          font-size: 13px;
+          font-family: Inter, sans-serif;
+          cursor: pointer;
+          transition: color 0.2s, border-color 0.2s;
+        }
+        .back-btn:hover { color: #F5F5F5; border-color: #333; }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+
         @media (max-width: 900px) {
           .bento-row { grid-template-columns: 1fr !important; }
           .bento-sub-row { grid-template-columns: 1fr !important; grid-column: 1 !important; }
@@ -614,6 +1056,7 @@ export default function App() {
           .gallery-cols { display: none !important; }
           .gallery-center { position: relative !important; padding: 80px 24px !important; }
           .journal-pill { border-radius: 20px; }
+          .all-projects-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
@@ -621,6 +1064,7 @@ export default function App() {
 
         {/* ══ HERO ══════════════════════════════════════════════════════════ */}
         <section
+          id="hero"
           style={{
             position: "relative",
             minHeight: "100svh",
@@ -629,17 +1073,17 @@ export default function App() {
             alignItems: "center",
           }}
         >
-          {/* background */}
+          {/* static cinematic background (optimized for performance) */}
           <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
             <img
               src="/assets/3b8d1031640f6c622f117ccc3cea45e112591b6b.png"
-              alt="Dark cinematic abstract water and sky background"
+              alt="Dark cinematic abstract background"
               style={{
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
                 filter: "brightness(0.28) blur(3px)",
-                transform: "scale(1.06)",
+                transform: "scale(1.05)",
               }}
             />
             <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.18)" }} />
@@ -696,7 +1140,7 @@ export default function App() {
                     letterSpacing: "0.02em",
                   }}
                 >
-                  YI
+                  AR
                 </span>
               </div>
             </GradientRing>
@@ -705,22 +1149,33 @@ export default function App() {
             <div style={{ width: 1, height: 20, background: C.border, margin: "0 6px" }} />
 
             {/* links */}
-            {["Home", "Work", "Resume"].map((link) => (
+            {([
+              { label: "Home",   href: "#hero" },
+              { label: "Work",   href: "#work" },
+              { label: "Resume", href: FIGMA_URL },
+            ] as const).map(({ label, href }) => (
               <button
-                key={link}
-                className={`nav-btn ${activeNav === link ? "active" : "inactive"}`}
-                onClick={() => setActiveNav(link)}
+                key={label}
+                className={`nav-btn ${activeNav === label ? "active" : "inactive"}`}
+                onClick={() => {
+                  setActiveNav(label);
+                  if (href.startsWith("#")) {
+                    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+                  } else {
+                    window.open(href, "_blank", "noopener");
+                  }
+                }}
               >
-                {link}
+                {label}
               </button>
             ))}
 
             {/* divider */}
             <div style={{ width: 1, height: 20, background: C.border, margin: "0 6px" }} />
 
-            <button className="say-hi">
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="say-hi" style={{ textDecoration: "none" }}>
               Say hi <ArrowUpRight size={11} />
-            </button>
+            </a>
           </nav>
 
           {/* ── Hero content ── */}
@@ -794,7 +1249,7 @@ export default function App() {
               >
                 {ROLES[roleIndex]}
               </em>
-              {" based in New York."}
+              {" based in Algeria."}
             </p>
 
             <p
@@ -865,7 +1320,7 @@ export default function App() {
         </section>
 
         {/* ══ SELECTED WORKS ════════════════════════════════════════════════ */}
-        <section style={{ padding: "110px 40px", maxWidth: 1280, margin: "0 auto" }}>
+        <section id="work" style={{ padding: "110px 40px", maxWidth: 1280, margin: "0 auto" }}>
           <div
             className="section-header"
             style={{
@@ -905,7 +1360,7 @@ export default function App() {
                 A selection of my work across UI/UX, social media campaigns, and packaging systems.
               </p>
             </div>
-            <button className="pill-btn">
+            <button className="pill-btn" onClick={goToProjects}>
               View all work <ArrowUpRight size={13} />
             </button>
           </div>
@@ -950,7 +1405,7 @@ export default function App() {
             }}
           >
             <div>
-              <Eyebrow label="Recent Work" />
+              <Eyebrow label="LinkedIn" />
               <h2 style={{ margin: 0, lineHeight: 1.05 }}>
                 <span
                   style={{
@@ -970,21 +1425,28 @@ export default function App() {
                     color: C.text,
                   }}
                 >
-                  thoughts
+                  posts.
                 </em>
               </h2>
               <p style={{ color: C.muted, fontSize: "14px", marginTop: 16, maxWidth: 400, lineHeight: 1.7 }}>
-                Notes on design, process, and the things I find worth writing about.
+                Thoughts on design, process, and creative strategy — shared on LinkedIn.
               </p>
             </div>
-            <button className="pill-btn">
-              View all <ArrowUpRight size={13} />
-            </button>
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="pill-btn" style={{ textDecoration: "none" }}>
+              View on LinkedIn <ArrowUpRight size={13} />
+            </a>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {JOURNAL.map((entry, i) => (
-              <div key={i} className="journal-pill">
+              <a
+                key={i}
+                href={entry.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="journal-pill"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
                 <img
                   src={entry.image}
                   alt={entry.alt}
@@ -1031,10 +1493,13 @@ export default function App() {
                     fontFamily: "Inter, sans-serif",
                   }}
                 >
-                  <div>{entry.readTime}</div>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 4 }}>
+                    <Linkedin size={11} />
+                    {entry.readTime}
+                  </div>
                   <div>{entry.date}</div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </section>
@@ -1175,7 +1640,10 @@ export default function App() {
               Experimental work, motion studies, social templates, and packaging mockups.
             </p>
             <GradientRing>
-              <button
+              <a
+                href={BEHANCE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
                   padding: "12px 26px",
                   borderRadius: 9999,
@@ -1188,10 +1656,11 @@ export default function App() {
                   display: "flex",
                   alignItems: "center",
                   gap: 7,
+                  textDecoration: "none",
                 }}
               >
-                See on Dribbble <ArrowUpRight size={12} />
-              </button>
+                See on Behance <ArrowUpRight size={12} />
+              </a>
             </GradientRing>
           </div>
         </section>
@@ -1387,7 +1856,14 @@ export default function App() {
                   gap: 8,
                 }}
               >
-                hello@yourname.com <ArrowUpRight size={14} />
+                <a
+                  href={LINKEDIN_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "inherit", textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}
+                >
+                  Connect on LinkedIn <ArrowUpRight size={14} />
+                </a>
               </button>
             </GradientRing>
           </div>
@@ -1408,34 +1884,32 @@ export default function App() {
             }}
           >
             <span style={{ color: C.muted, fontSize: "12px", fontFamily: "Inter, sans-serif" }}>
-              © 2026 Your Name. All rights reserved.
+              © 2026 Anes Ragoub. All rights reserved.
             </span>
 
             <div style={{ display: "flex", gap: 22, alignItems: "center" }}>
               {[
-                { Icon: Twitter, label: "X / Twitter" },
-                { Icon: Linkedin, label: "LinkedIn" },
-                { Icon: Dribbble, label: "Dribbble" },
-              ].map(({ Icon, label }) => (
-                <button
+                { Icon: Instagram, label: "Instagram", href: INSTAGRAM_URL },
+                { Icon: Linkedin,  label: "LinkedIn",  href: LINKEDIN_URL  },
+              ].map(({ Icon, label, href }) => (
+                <a
                   key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   title={label}
                   style={{
-                    background: "none",
-                    border: "none",
                     color: C.muted,
-                    cursor: "pointer",
-                    padding: 4,
                     display: "flex",
                     alignItems: "center",
-                    transition: "color 0.2s",
                     lineHeight: 0,
+                    transition: "color 0.2s",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#C0C0C0")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = C.muted)}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#C0C0C0")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = C.muted)}
                 >
                   <Icon size={15} />
-                </button>
+                </a>
               ))}
             </div>
 
