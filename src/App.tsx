@@ -14,108 +14,10 @@ const C = {
   border: "#1F1F1F",
 };
 
-const PROJECTS = [
-  {
-    title: "Social Campaign — Apparel",
-    category: "Social Media",
-    year: "2026",
-    wide: true,
-    image: "/assets/e37ca59c98504c97b809f6b0573114c4c632b984.png",
-    alt: "Fashion editorial campaign — woman in black blazer",
-  },
-  {
-    title: "Packaging Design — Cosmetics",
-    category: "Packaging",
-    year: "2025",
-    wide: false,
-    image: "/assets/e89add6920e3dd49952dd44946b71060231dc239.png",
-    alt: "Luxury cosmetics packaging arranged on dark surface",
-  },
-  {
-    title: "Mobile UI — Wellness App",
-    category: "UI/UX Design",
-    year: "2025",
-    wide: false,
-    image: "/assets/d64d7fc4ca830da17517830e3cdf0df88503b923.png",
-    alt: "Dark mode wellness mobile app on device",
-  },
-  {
-    title: "Brand Identity System",
-    category: "Branding",
-    year: "2024",
-    wide: true,
-    image: "/assets/255f15408d482942a3a822b169bfce077684d2ba.png",
-    alt: "Brand identity business cards on dark surface",
-  },
-];
-
-/* All 8 projects shown on the full projects page */
-const ALL_PROJECTS = [
-  {
-    title: "Social Campaign — Apparel",
-    category: "Social Media",
-    year: "2026",
-    description: "A full editorial Instagram campaign for a streetwear label — grid layout, story templates, and motion cover assets.",
-    image: "/assets/e37ca59c98504c97b809f6b0573114c4c632b984.png",
-    alt: "Fashion editorial campaign — woman in black blazer",
-  },
-  {
-    title: "Packaging Design — Cosmetics",
-    category: "Packaging",
-    year: "2025",
-    description: "End-to-end packaging system for a luxury skincare brand: structural design, typography, and material specification.",
-    image: "/assets/e89add6920e3dd49952dd44946b71060231dc239.png",
-    alt: "Luxury cosmetics packaging arranged on dark surface",
-  },
-  {
-    title: "Mobile UI — Wellness App",
-    category: "UI/UX",
-    year: "2025",
-    description: "Dark-mode interface for a mindfulness and sleep tracking app, with a custom design system and component library.",
-    image: "/assets/d64d7fc4ca830da17517830e3cdf0df88503b923.png",
-    alt: "Dark mode wellness mobile app on device",
-  },
-  {
-    title: "Brand Identity System",
-    category: "Branding",
-    year: "2024",
-    description: "Complete visual identity for a boutique creative studio — logo, color system, type hierarchy, and usage guidelines.",
-    image: "/assets/255f15408d482942a3a822b169bfce077684d2ba.png",
-    alt: "Brand identity business cards on dark surface",
-  },
-  {
-    title: "E-Commerce Redesign",
-    category: "UI/UX",
-    year: "2026",
-    description: "Full product page and checkout flow redesign for a fashion retailer, improving conversion with a premium dark editorial feel.",
-    image: "/assets/ad274ce3097e7f44c8e612c6b3373139aa329cc3.png",
-    alt: "Dark editorial fashion on monitor",
-  },
-  {
-    title: "Skincare Line — Packaging",
-    category: "Packaging",
-    year: "2025",
-    description: "Packaging system for a clinical skincare line — minimalist, medical-grade aesthetic with tactile finish specification.",
-    image: "/assets/1e9c51112cd6e93ff24da608ca5e63dbc793e534.png",
-    alt: "Skincare and design workspace",
-  },
-  {
-    title: "Festival Visual Identity",
-    category: "Branding",
-    year: "2025",
-    description: "Full visual identity for an electronic music festival: poster series, stage graphics, social assets, and wayfinding.",
-    image: "/assets/3b8d1031640f6c622f117ccc3cea45e112591b6b.png",
-    alt: "Abstract dark atmospheric visual",
-  },
-  {
-    title: "Analytics Dashboard UI",
-    category: "UI/UX",
-    year: "2024",
-    description: "Data visualization dashboard for a SaaS product — custom chart components, dark theme, and a scalable token system.",
-    image: "/assets/1cf3b2887c18b0244b46bc1196b22f85f0510414.png",
-    alt: "Dark design workspace with monitors",
-  },
-];
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Admin from "./Admin";
+import { supabase } from "./supabaseClient";
+import { ProjectModal } from "./components/ProjectModal";
 
 const CATEGORIES = ["All", "UI/UX", "Social Media", "Packaging", "Branding"];
 
@@ -124,7 +26,7 @@ const INSTAGRAM_URL = "https://www.instagram.com/xero._.design/";
 const BEHANCE_URL = "https://www.behance.net/AnesRagoub";
 const FIGMA_URL = "https://www.figma.com/design/nCno1YvHqW9zp6sZMeHXR0/Portfolio?node-id=1-18275&t=wP3j4GMWRa3icm91-1";
 
-const JOURNAL = [
+const FALLBACK_JOURNAL = [
   {
     title: "Building a Social Media Design System from Scratch",
     excerpt: "How I systematized a chaotic workflow into a scalable visual library.",
@@ -241,16 +143,21 @@ function Eyebrow({ label }: { label: string }) {
 function ProjectCard({
   project,
   index,
+  onOpen,
 }: {
-  project: (typeof PROJECTS)[0];
+  project: any;
   index: number;
+  onOpen: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
+
+  if (!project) return null;
 
   return (
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onClick={onOpen}
       style={{
         position: "relative",
         background: C.surface,
@@ -368,13 +275,21 @@ function ProjectCard({
 
 /* ─── all projects page ─────────────────────────────────────────────────── */
 
-function AllProjectsPage({ onBack }: { onBack: () => void }) {
+function AllProjectsPage({
+  onBack,
+  allProjects,
+  onOpenProject,
+}: {
+  onBack: () => void;
+  allProjects: any[];
+  onOpenProject: (project: any) => void;
+}) {
   const [activeFilter, setActiveFilter] = useState("All");
 
   const filtered =
     activeFilter === "All"
-      ? ALL_PROJECTS
-      : ALL_PROJECTS.filter((p) => p.category === activeFilter);
+      ? allProjects
+      : allProjects.filter((p) => p.category === activeFilter);
 
   return (
     <div
@@ -471,7 +386,7 @@ function AllProjectsPage({ onBack }: { onBack: () => void }) {
             </em>
           </h1>
           <p style={{ color: C.muted, fontSize: "14px", maxWidth: 360, lineHeight: 1.75, margin: 0 }}>
-            {ALL_PROJECTS.length} projects across UI/UX design, social media campaigns, packaging
+            {allProjects.length} projects across UI/UX design, social media campaigns, packaging
             systems, and brand identity.
           </p>
         </div>
@@ -487,7 +402,7 @@ function AllProjectsPage({ onBack }: { onBack: () => void }) {
               {cat}
               {cat !== "All" && (
                 <span style={{ marginLeft: 6, color: C.muted, fontSize: "11px" }}>
-                  {ALL_PROJECTS.filter((p) => p.category === cat).length}
+                  {allProjects.filter((p) => p.category === cat).length}
                 </span>
               )}
             </button>
@@ -495,7 +410,7 @@ function AllProjectsPage({ onBack }: { onBack: () => void }) {
         </div>
 
         <div style={{ marginTop: 16, color: C.muted, fontSize: "12px", letterSpacing: "0.08em" }}>
-          Showing {filtered.length} of {ALL_PROJECTS.length}
+          Showing {filtered.length} of {allProjects.length}
         </div>
       </div>
 
@@ -521,6 +436,7 @@ function AllProjectsPage({ onBack }: { onBack: () => void }) {
                   minHeight: 320,
                   cursor: "pointer",
                 }}
+                onClick={() => onOpenProject(project)}
                 onMouseEnter={(e) =>
                   (e.currentTarget.querySelector("img")!.style.transform = "scale(1.06)")
                 }
@@ -633,7 +549,7 @@ function AllProjectsPage({ onBack }: { onBack: () => void }) {
 
 /* ─── main component ────────────────────────────────────────────────────── */
 
-export default function App() {
+function Portfolio() {
   const [currentPage, setCurrentPage] = useState<"home" | "projects">("home");
   const [isLoading, setIsLoading] = useState(true);
   const [counter, setCounter] = useState(0);
@@ -642,6 +558,50 @@ export default function App() {
   const [activeNav, setActiveNav] = useState("Home");
   const [roleIndex, setRoleIndex] = useState(0);
   const [roleVisible, setRoleVisible] = useState(true);
+  
+  const [allProjects, setAllProjects] = useState<any[]>([]);
+  const [selectedProject, setSelectedProject] = useState<any | null>(null);
+  const [journalEntries, setJournalEntries] = useState<any[]>(FALLBACK_JOURNAL);
+  const featuredProjects = allProjects.slice(0, 4);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('visible', true)
+        .order('created_at', { ascending: false });
+      if (!error && data) {
+        setAllProjects(data);
+      }
+    };
+
+    const fetchLinkedInPosts = async () => {
+      const { data, error } = await supabase
+        .from('linkedin_posts')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(6);
+
+      if (!error && data && data.length > 0) {
+        const mapped = data.map((entry: any) => ({
+          title: entry.title || 'LinkedIn post',
+          excerpt: entry.excerpt || 'A recent post shared on LinkedIn.',
+          readTime: entry.read_time || 'LinkedIn post',
+          date: entry.date || new Date(entry.created_at).toLocaleDateString('en', { month: 'short', year: 'numeric' }),
+          image: entry.image || '/assets/1cf3b2887c18b0244b46bc1196b22f85f0510414.png',
+          alt: entry.alt || 'LinkedIn post preview',
+          url: entry.url || LINKEDIN_URL,
+        }));
+        setJournalEntries(mapped);
+      } else {
+        setJournalEntries(FALLBACK_JOURNAL);
+      }
+    };
+
+    fetchProjects();
+    fetchLinkedInPosts();
+  }, []);
 
   const goToProjects = () => {
     setCurrentPage("projects");
@@ -649,8 +609,20 @@ export default function App() {
   };
   const goHome = () => {
     setCurrentPage("home");
+    setSelectedProject(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedProject]);
 
   /* loading counter */
   useEffect(() => {
@@ -837,7 +809,7 @@ export default function App() {
             .all-projects-grid { grid-template-columns: 1fr !important; }
           }
         `}</style>
-        <AllProjectsPage onBack={goHome} />
+        <AllProjectsPage onBack={goHome} allProjects={allProjects} onOpenProject={setSelectedProject} />
       </>
     );
   }
@@ -1061,6 +1033,9 @@ export default function App() {
       `}</style>
 
       <div style={{ background: C.bg, color: C.text, fontFamily: "Inter, sans-serif" }}>
+        {selectedProject ? (
+          <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} relatedProjects={allProjects} />
+        ) : null}
 
         {/* ══ HERO ══════════════════════════════════════════════════════════ */}
         <section
@@ -1266,8 +1241,8 @@ export default function App() {
             </p>
 
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
-              <button className="cta-fill">See Works</button>
-              <button className="cta-outline">Reach out...</button>
+              <a className="cta-fill" href="#work">See Works</a>
+              <a href={LINKEDIN_URL} className="cta-outline">Reach out...</a>
             </div>
           </div>
 
@@ -1370,8 +1345,8 @@ export default function App() {
             className="bento-row"
             style={{ display: "grid", gridTemplateColumns: "7fr 5fr", gap: 16 }}
           >
-            <ProjectCard project={PROJECTS[0]} index={0} />
-            <ProjectCard project={PROJECTS[1]} index={1} />
+            <ProjectCard project={featuredProjects[0]} index={0} onOpen={() => setSelectedProject(featuredProjects[0])} />
+            <ProjectCard project={featuredProjects[1]} index={1} onOpen={() => setSelectedProject(featuredProjects[1])} />
             <div
               className="bento-sub-row"
               style={{
@@ -1381,8 +1356,8 @@ export default function App() {
                 gap: 16,
               }}
             >
-              <ProjectCard project={PROJECTS[2]} index={2} />
-              <ProjectCard project={PROJECTS[3]} index={3} />
+              <ProjectCard project={featuredProjects[2]} index={2} onOpen={() => setSelectedProject(featuredProjects[2])} />
+              <ProjectCard project={featuredProjects[3]} index={3} onOpen={() => setSelectedProject(featuredProjects[3])} />
             </div>
           </div>
         </section>
@@ -1438,7 +1413,7 @@ export default function App() {
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {JOURNAL.map((entry, i) => (
+            {journalEntries.map((entry, i) => (
               <a
                 key={i}
                 href={entry.url}
@@ -1875,11 +1850,10 @@ export default function App() {
               position: "relative",
               zIndex: 10,
               borderTop: `1px solid ${C.border}`,
-              display: "flex",
+              display: "grid",
+              gridTemplateColumns: "1fr auto 1fr",
               alignItems: "center",
-              justifyContent: "space-between",
               padding: "20px 40px",
-              flexWrap: "wrap",
               gap: 14,
             }}
           >
@@ -1887,7 +1861,7 @@ export default function App() {
               © 2026 Anes Ragoub. All rights reserved.
             </span>
 
-            <div style={{ display: "flex", gap: 22, alignItems: "center" }}>
+            <div style={{ display: "flex", gap: 22, alignItems: "center", justifySelf: "center" }}>
               {[
                 { Icon: Instagram, label: "Instagram", href: INSTAGRAM_URL },
                 { Icon: Linkedin,  label: "LinkedIn",  href: LINKEDIN_URL  },
@@ -1913,7 +1887,7 @@ export default function App() {
               ))}
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 9, justifySelf: "end" }}>
               <div
                 style={{
                   width: 7,
@@ -1932,5 +1906,14 @@ export default function App() {
         </section>
       </div>
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Portfolio />} />
+      <Route path="/admin" element={<Admin />} />
+    </Routes>
   );
 }
