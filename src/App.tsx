@@ -19,7 +19,7 @@ import Admin from "./Admin";
 import { supabase } from "./supabaseClient";
 import { ProjectModal } from "./components/ProjectModal";
 
-const CATEGORIES = ["All", "UI/UX", "Social Media", "Packaging", "Branding"];
+const CATEGORIES = ["All", "Graphic Design", "UI/UX Design", "Packaging Design", "Branding Design"];
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/anes-ragoub/";
 const INSTAGRAM_URL = "https://www.instagram.com/xero._.design/";
@@ -94,6 +94,18 @@ const GALLERY_IMAGES = [
 
 /* ─── helpers ───────────────────────────────────────────────────────────── */
 
+function normalizeCategory(category?: string) {
+  const value = category?.trim().toLowerCase();
+
+  if (!value) return "Graphic Design";
+  if (["graphic design", "graphic", "social media"].includes(value)) return "Graphic Design";
+  if (["ui/ux design", "ui/ux", "ux/ui", "ux design"].includes(value)) return "UI/UX Design";
+  if (["packaging design", "packaging", "package"].includes(value)) return "Packaging Design";
+  if (["branding design", "branding", "brand"].includes(value)) return "Branding Design";
+
+  return category;
+}
+
 function GradientRing({
   children,
   className = "",
@@ -134,6 +146,39 @@ function Eyebrow({ label }: { label: string }) {
       >
         {label}
       </span>
+    </div>
+  );
+}
+
+function SectionAccent({
+  rotate = -16,
+  top = "18%",
+  left = "-18%",
+  width = "140%",
+  opacity = 0.18,
+}: {
+  rotate?: number;
+  top?: string;
+  left?: string;
+  width?: string;
+  opacity?: number;
+}) {
+  return (
+    <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
+      <div
+        style={{
+          position: "absolute",
+          top,
+          left,
+          width,
+          height: 1,
+          background: "linear-gradient(90deg, transparent 0%, rgba(137,170,204,0.95) 45%, rgba(137,170,204,0.18) 100%)",
+          boxShadow: "0 0 18px rgba(78,133,191,0.16)",
+          transform: `rotate(${rotate}deg)`,
+          filter: "blur(0.7px)",
+          opacity,
+        }}
+      />
     </div>
   );
 }
@@ -289,7 +334,7 @@ function AllProjectsPage({
   const filtered =
     activeFilter === "All"
       ? allProjects
-      : allProjects.filter((p) => p.category === activeFilter);
+      : allProjects.filter((p) => normalizeCategory(p.category) === activeFilter);
 
   return (
     <div
@@ -402,7 +447,7 @@ function AllProjectsPage({
               {cat}
               {cat !== "All" && (
                 <span style={{ marginLeft: 6, color: C.muted, fontSize: "11px" }}>
-                  {allProjects.filter((p) => p.category === cat).length}
+                  {allProjects.filter((p) => normalizeCategory(p.category) === cat).length}
                 </span>
               )}
             </button>
@@ -1016,6 +1061,17 @@ function Portfolio() {
           to   { opacity: 1; }
         }
 
+        @keyframes transitionShatter {
+          0% {
+            transform: perspective(700px) rotateX(72deg) skewX(-8deg) translateX(-2%);
+            opacity: 0.55;
+          }
+          100% {
+            transform: perspective(700px) rotateX(76deg) skewX(8deg) translateX(2%);
+            opacity: 0.9;
+          }
+        }
+
         @media (max-width: 900px) {
           .bento-row { grid-template-columns: 1fr !important; }
           .bento-sub-row { grid-template-columns: 1fr !important; grid-column: 1 !important; }
@@ -1294,8 +1350,40 @@ function Portfolio() {
           </div>
         </section>
 
+        <div
+          style={{
+            position: "relative",
+            height: 96,
+            marginTop: -2,
+            overflow: "hidden",
+            background: C.bg,
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              inset: "0 0 0 0",
+              background: "linear-gradient(120deg, transparent 0%, rgba(137,170,204,0.08) 18%, rgba(255,255,255,0.04) 52%, rgba(137,170,204,0.08) 82%, transparent 100%)",
+              filter: "blur(12px)",
+              transform: "perspective(700px) rotateX(72deg) skewX(-8deg)",
+              animation: "transitionShatter 7.5s ease-in-out infinite alternate",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "repeating-linear-gradient(108deg, transparent 0 4px, rgba(137,170,204,0.05) 4px 5px, transparent 5px 10px)",
+              opacity: 0.45,
+              mixBlendMode: "screen",
+            }}
+          />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(10,10,10,0.12), rgba(10,10,10,0.95))" }} />
+        </div>
+
         {/* ══ SELECTED WORKS ════════════════════════════════════════════════ */}
-        <section id="work" style={{ padding: "110px 40px", maxWidth: 1280, margin: "0 auto" }}>
+        <section id="work" style={{ position: "relative", padding: "110px 40px", maxWidth: 1280, margin: "0 auto" }}>
+          <SectionAccent />
           <div
             className="section-header"
             style={{
@@ -1365,11 +1453,13 @@ function Portfolio() {
         {/* ══ JOURNAL ═══════════════════════════════════════════════════════ */}
         <section
           style={{
+            position: "relative",
             padding: "80px 40px 110px",
             maxWidth: 1280,
             margin: "0 auto",
           }}
         >
+          <SectionAccent top="22%" left="-10%" width="130%" rotate={-14} opacity={0.16} />
           <div
             className="section-header"
             style={{
@@ -1491,6 +1581,7 @@ function Portfolio() {
             justifyContent: "center",
           }}
         >
+          <SectionAccent top="26%" left="-12%" width="132%" rotate={-10} opacity={0.14} />
           {/* two-column gallery bg */}
           <div
             className="gallery-cols"
@@ -1643,11 +1734,13 @@ function Portfolio() {
         {/* ══ STATS ═════════════════════════════════════════════════════════ */}
         <section
           style={{
+            position: "relative",
             padding: "100px 40px",
             borderTop: `1px solid ${C.border}`,
             borderBottom: `1px solid ${C.border}`,
           }}
         >
+          <SectionAccent top="36%" left="-8%" width="130%" rotate={-12} opacity={0.12} />
           <div
             className="stats-row"
             style={{
@@ -1658,7 +1751,7 @@ function Portfolio() {
           >
             {[
               { number: "5+", label: "Years of Experience" },
-              { number: "40+", label: "Projects Delivered" },
+              { number: "10+", label: "Projects Delivered" },
               { number: "100%", label: "Client Satisfaction" },
             ].map((stat, i, arr) => (
               <div

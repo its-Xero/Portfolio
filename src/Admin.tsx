@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import { Trash2, Edit2, Eye, EyeOff, Plus, LogOut } from 'lucide-react';
 
+const PROJECT_CATEGORIES = ['Graphic Design', 'UI/UX Design', 'Packaging Design', 'Branding Design'];
+
 export default function Admin() {
   const [session, setSession] = useState<any>(null);
   const [email, setEmail] = useState('');
@@ -259,7 +261,12 @@ export default function Admin() {
               </div>
               <div>
                 <label style={{ display: 'block', fontSize: 13, color: '#878787', marginBottom: 8 }}>Category</label>
-                <input type="text" value={currentProject.category} onChange={e => setCurrentProject({...currentProject, category: e.target.value})} required style={{ width: '100%', padding: 10, background: '#0A0A0A', border: '1px solid #1F1F1F', color: '#F5F5F5', borderRadius: 6, boxSizing: 'border-box' }} />
+                <select value={currentProject.category || ''} onChange={e => setCurrentProject({...currentProject, category: e.target.value})} required style={{ width: '100%', padding: 10, background: '#0A0A0A', border: '1px solid #1F1F1F', color: '#F5F5F5', borderRadius: 6, boxSizing: 'border-box' }}>
+                  <option value="" disabled>Select a category</option>
+                  {PROJECT_CATEGORIES.map(category => (
+                    <option key={category} value={category}>{category}</option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label style={{ display: 'block', fontSize: 13, color: '#878787', marginBottom: 8 }}>Year</label>
