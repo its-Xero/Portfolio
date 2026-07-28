@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { ArrowUpRight, ArrowLeft, Linkedin, Instagram } from "lucide-react";
 
 /* ─── constants ─────────────────────────────────────────────────────────── */
@@ -14,7 +14,7 @@ const C = {
   border: "#1F1F1F",
 };
 
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Admin from "./Admin";
 import { supabase } from "./supabaseClient";
 import { ProjectModal } from "./components/ProjectModal";
@@ -187,11 +187,9 @@ function SectionAccent({
 
 function ProjectCard({
   project,
-  index,
   onOpen,
 }: {
   project: any;
-  index: number;
   onOpen: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
@@ -1433,8 +1431,8 @@ function Portfolio() {
             className="bento-row"
             style={{ display: "grid", gridTemplateColumns: "7fr 5fr", gap: 16 }}
           >
-            <ProjectCard project={featuredProjects[0]} index={0} onOpen={() => setSelectedProject(featuredProjects[0])} />
-            <ProjectCard project={featuredProjects[1]} index={1} onOpen={() => setSelectedProject(featuredProjects[1])} />
+            <ProjectCard project={featuredProjects[0]} onOpen={() => setSelectedProject(featuredProjects[0])} />
+            <ProjectCard project={featuredProjects[1]} onOpen={() => setSelectedProject(featuredProjects[1])} />
             <div
               className="bento-sub-row"
               style={{
@@ -1444,8 +1442,8 @@ function Portfolio() {
                 gap: 16,
               }}
             >
-              <ProjectCard project={featuredProjects[2]} index={2} onOpen={() => setSelectedProject(featuredProjects[2])} />
-              <ProjectCard project={featuredProjects[3]} index={3} onOpen={() => setSelectedProject(featuredProjects[3])} />
+              <ProjectCard project={featuredProjects[2]} onOpen={() => setSelectedProject(featuredProjects[2])} />
+              <ProjectCard project={featuredProjects[3]} onOpen={() => setSelectedProject(featuredProjects[3])} />
             </div>
           </div>
         </section>
