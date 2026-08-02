@@ -34,8 +34,8 @@ export function ProjectModal({
     >
       <div className="absolute inset-0 bg-[#0A0A0A]/95" onClick={onClose} />
 
-      <div className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-[32px] border border-[#1F1F1F] bg-[#141414] text-[#F5F5F5] shadow-2xl">
-        <div className="max-h-[90vh] overflow-y-auto">
+      <div className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-[32px] border border-[#1F1F1F] bg-[#141414] text-[#F5F5F5] shadow-2xl" style={{ transform: 'translateZ(0)', contain: 'content' }}>
+        <div className="max-h-[90vh] overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch', contain: 'content' }}>
           <div className="mx-auto w-full max-w-5xl px-6 py-8 sm:px-8 sm:py-10 md:px-12">
             <div className="mb-6">
               <button
