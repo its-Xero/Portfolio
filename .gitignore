@@ -8,6 +8,12 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+migrations
+"Dark Portfolio Landing Page"
+setup.md
+BACKEND_SETUP.md
+LINKEDIN_SETUP.md
+"Dark Portfolio Landing Page.zip"
 dist
 dist-ssr
 *.local

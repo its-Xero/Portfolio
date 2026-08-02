@@ -26,45 +26,6 @@ const INSTAGRAM_URL = "https://www.instagram.com/xero._.design/";
 const BEHANCE_URL = "https://www.behance.net/AnesRagoub";
 const FIGMA_URL = "https://www.figma.com/design/nCno1YvHqW9zp6sZMeHXR0/Portfolio?node-id=1-18275&t=wP3j4GMWRa3icm91-1";
 
-const FALLBACK_JOURNAL = [
-  {
-    title: "Building a Social Media Design System from Scratch",
-    excerpt: "How I systematized a chaotic workflow into a scalable visual library.",
-    readTime: "LinkedIn post",
-    date: "May 2026",
-    image: "/assets/1cf3b2887c18b0244b46bc1196b22f85f0510414.png",
-    alt: "Dark design workspace with monitors",
-    url: LINKEDIN_URL,
-  },
-  {
-    title: "Why Packaging Design Is Just UI for Physical Products",
-    excerpt: "The surprising overlap between screen interfaces and shelf presence.",
-    readTime: "LinkedIn post",
-    date: "April 2026",
-    image: "/assets/5555a4b9a9c5e8b522b2f76d20619d5025f0f728.png",
-    alt: "Close-up of cosmetics on a dark table",
-    url: LINKEDIN_URL,
-  },
-  {
-    title: "The Invisible Rules Behind Every Great Instagram Grid",
-    excerpt: "Color blocking, rhythm, and the silent grammar of visual feeds.",
-    readTime: "LinkedIn post",
-    date: "March 2026",
-    image: "/assets/1e9c51112cd6e93ff24da608ca5e63dbc793e534.png",
-    alt: "Dual monitors displaying design work",
-    url: LINKEDIN_URL,
-  },
-  {
-    title: "When Brand Guidelines Actually Help You Move Faster",
-    excerpt: "Constraints as creative catalysts — a counterintuitive take.",
-    readTime: "LinkedIn post",
-    date: "February 2026",
-    image: "/assets/e884c48f9aada005309bdb7000cda06250ba250b.png",
-    alt: "Designer workspace with brand materials",
-    url: LINKEDIN_URL,
-  },
-];
-
 const GALLERY_IMAGES = [
   {
     src: "/assets/ad274ce3097e7f44c8e612c6b3373139aa329cc3.png",
@@ -604,7 +565,7 @@ function Portfolio() {
   
   const [allProjects, setAllProjects] = useState<any[]>([]);
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
-  const [journalEntries, setJournalEntries] = useState<any[]>(FALLBACK_JOURNAL);
+  const [journalEntries, setJournalEntries] = useState<any[]>([]);
   const featuredProjects = allProjects.slice(0, 4);
 
   useEffect(() => {
@@ -632,13 +593,13 @@ function Portfolio() {
           excerpt: entry.excerpt || 'A recent post shared on LinkedIn.',
           readTime: entry.read_time || 'LinkedIn post',
           date: entry.date || new Date(entry.created_at).toLocaleDateString('en', { month: 'short', year: 'numeric' }),
-          image: entry.image || '/assets/1cf3b2887c18b0244b46bc1196b22f85f0510414.png',
+          image: entry.image || '',
           alt: entry.alt || 'LinkedIn post preview',
           url: entry.url || LINKEDIN_URL,
         }));
         setJournalEntries(mapped);
       } else {
-        setJournalEntries(FALLBACK_JOURNAL);
+        setJournalEntries([]);
       }
     };
 
@@ -1081,14 +1042,16 @@ function Portfolio() {
           .section-header { flex-direction: column; align-items: flex-start !important; gap: 20px; }
           .gallery-cols { display: none !important; }
           .gallery-center { position: relative !important; padding: 80px 24px !important; }
-          .journal-pill { border-radius: 20px; }
+          .journal-pill { border-radius: 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
+          .journal-pill img { width: 100% !important; height: 180px !important; }
+          .journal-pill > div:last-child { text-align: left !important; width: 100%; }
           .all-projects-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
       <div style={{ background: C.bg, color: C.text, fontFamily: "Inter, sans-serif" }}>
         {selectedProject ? (
-          <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} relatedProjects={allProjects} />
+          <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
         ) : null}
 
         {/* ══ HERO ══════════════════════════════════════════════════════════ */}
@@ -1500,71 +1463,73 @@ function Portfolio() {
             </a>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {journalEntries.map((entry, i) => (
-              <a
-                key={i}
-                href={entry.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="journal-pill"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <img
-                  src={entry.image}
-                  alt={entry.alt}
-                  style={{
-                    width: 56,
-                    height: 56,
-                    borderRadius: 14,
-                    objectFit: "cover",
-                    flexShrink: 0,
-                    background: C.surface,
-                  }}
-                />
-                <div style={{ flex: 1, minWidth: 0 }}>
+          {journalEntries.length > 0 ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {journalEntries.map((entry, i) => (
+                <a
+                  key={i}
+                  href={entry.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="journal-pill"
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <img
+                    src={entry.image}
+                    alt={entry.alt}
+                    style={{
+                      width: 56,
+                      height: 56,
+                      borderRadius: 14,
+                      objectFit: "cover",
+                      flexShrink: 0,
+                      background: C.surface,
+                    }}
+                  />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        fontWeight: 500,
+                        fontSize: "15px",
+                        color: C.text,
+                        marginBottom: 5,
+                        fontFamily: "Inter, sans-serif",
+                      }}
+                    >
+                      {entry.title}
+                    </div>
+                    <div
+                      style={{
+                        color: C.muted,
+                        fontSize: "13px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {entry.excerpt}
+                    </div>
+                  </div>
                   <div
                     style={{
-                      fontWeight: 500,
-                      fontSize: "15px",
-                      color: C.text,
-                      marginBottom: 5,
+                      textAlign: "right",
+                      flexShrink: 0,
+                      color: C.muted,
+                      fontSize: "12px",
+                      lineHeight: 1.9,
                       fontFamily: "Inter, sans-serif",
                     }}
                   >
-                    {entry.title}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 4 }}>
+                      <Linkedin size={11} />
+                      {entry.readTime}
+                    </div>
+                    <div>{entry.date}</div>
                   </div>
-                  <div
-                    style={{
-                      color: C.muted,
-                      fontSize: "13px",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {entry.excerpt}
-                  </div>
-                </div>
-                <div
-                  style={{
-                    textAlign: "right",
-                    flexShrink: 0,
-                    color: C.muted,
-                    fontSize: "12px",
-                    lineHeight: 1.9,
-                    fontFamily: "Inter, sans-serif",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 4 }}>
-                    <Linkedin size={11} />
-                    {entry.readTime}
-                  </div>
-                  <div>{entry.date}</div>
-                </div>
-              </a>
-            ))}
-          </div>
+                </a>
+              ))}
+            </div>
+          ) : null}
         </section>
 
         {/* ══ VISUAL EXPLORATIONS ═══════════════════════════════════════════ */}
