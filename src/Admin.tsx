@@ -21,8 +21,8 @@ export default function Admin() {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
   const [imageCropSettings, setImageCropSettings] = useState({ x: 50, y: 50, scale: 1 });
   const [croppedImageFile, setCroppedImageFile] = useState<File | null>(null);
-  const [galleryFileSlots, setGalleryFileSlots] = useState<(File | null)[]>([null, null, null, null]);
-  const [galleryPreviewUrls, setGalleryPreviewUrls] = useState<string[]>(['', '', '', '']);
+  const [galleryFileSlots, setGalleryFileSlots] = useState<(File | null)[]>(Array.from({ length: 10 }, () => null));
+  const [galleryPreviewUrls, setGalleryPreviewUrls] = useState<string[]>(Array.from({ length: 10 }, () => ''));
   const [postImageFile, setPostImageFile] = useState<File | null>(null);
   const [currentPost, setCurrentPost] = useState<any>({
     title: '',
@@ -195,7 +195,7 @@ export default function Admin() {
     const existingGalleryImages = currentProject.gallery_images || [];
     const galleryImageUrls: string[] = [];
     try {
-      for (let index = 0; index < 4; index += 1) {
+      for (let index = 0; index < 10; index += 1) {
         if (galleryFileSlots[index]) {
           const uploadedUrl = await uploadImage(galleryFileSlots[index] as File);
           galleryImageUrls.push(uploadedUrl);
@@ -233,8 +233,8 @@ export default function Admin() {
     setImagePreviewUrl('');
     setCroppedImageFile(null);
     setImageCropSettings({ x: 50, y: 50, scale: 1 });
-    setGalleryFileSlots([null, null, null, null]);
-    setGalleryPreviewUrls(['', '', '', '']);
+    setGalleryFileSlots(Array.from({ length: 10 }, () => null));
+    setGalleryPreviewUrls(Array.from({ length: 10 }, () => ''));
     fetchProjects();
   };
 
@@ -519,9 +519,9 @@ export default function Admin() {
                 ) : null}
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: 13, color: '#878787', marginBottom: 8 }}>Gallery images</label>
+                <label style={{ display: 'block', fontSize: 13, color: '#878787', marginBottom: 8 }}>Gallery images (up to 10 images)</label>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}>
-                  {Array.from({ length: 4 }).map((_, index) => {
+                  {Array.from({ length: 10 }).map((_, index) => {
                     const previewUrl = galleryPreviewUrls[index] || currentProject.gallery_images?.[index] || '';
                     return (
                       <div key={index} style={{ position: 'relative', minHeight: 100, borderRadius: 12, border: '1px solid #1F1F1F', background: '#0A0A0A' }}>

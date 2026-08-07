@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowUpRight, ArrowLeft, Linkedin, Instagram } from "lucide-react";
+import { ArrowUpRight, ArrowLeft, Linkedin, Instagram, Globe, Figma, Download } from "lucide-react";
 
 /* ─── constants ─────────────────────────────────────────────────────────── */
 
@@ -25,6 +25,23 @@ const LINKEDIN_URL = "https://www.linkedin.com/in/anes-ragoub/";
 const INSTAGRAM_URL = "https://www.instagram.com/xero._.design/";
 const BEHANCE_URL = "https://www.behance.net/AnesRagoub";
 const FIGMA_URL = "https://www.figma.com/design/nCno1YvHqW9zp6sZMeHXR0/Portfolio?node-id=1-18275&t=wP3j4GMWRa3icm91-1";
+const CV_URL = FIGMA_URL; // replace with your actual CV link or local PDF path when ready
+
+const NAV_ITEMS = [
+  { label: "Home", href: "#hero" },
+  { label: "Work", href: "#work" },
+  { label: "Posts", href: "#journal" },
+  { label: "Resume", href: "#visual" },
+  { label: "Contact", href: "#contact" },
+];
+
+const CONTACT_BUTTONS = [
+  { label: "Instagram", href: INSTAGRAM_URL, Icon: Instagram, color: "#E1306C", glow: "rgba(225,48,108,0.18)" },
+  { label: "LinkedIn", href: LINKEDIN_URL, Icon: Linkedin, color: "#0A66C2", glow: "rgba(10,102,194,0.16)" },
+  { label: "Behance", href: BEHANCE_URL, Icon: Globe, color: "#1769FF", glow: "rgba(23,105,255,0.16)" },
+  { label: "Figma", href: FIGMA_URL, Icon: Figma, color: "#F24E1E", glow: "rgba(242,78,30,0.16)" },
+  { label: "CV", href: CV_URL, Icon: Download, color: "#22C55E", glow: "rgba(34,197,94,0.16)" },
+];
 
 const GALLERY_IMAGES = [
   {
@@ -308,17 +325,23 @@ function AllProjectsPage({
       {/* ── sticky top bar ── */}
       <div
         style={{
-          position: "sticky",
-          top: 0,
+          position: "fixed",
+          top: 16,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "fit-content",
+          maxWidth: "calc(100% - 32px)",
           zIndex: 50,
           borderBottom: `1px solid ${C.border}`,
-          background: "rgba(10,10,10,0.90)",
+          background: "rgba(10,10,10,0.92)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
-          padding: "16px 40px",
+          padding: "12px 20px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 12,
         }}
       >
         <button className="back-btn" onClick={onBack}>
@@ -353,7 +376,7 @@ function AllProjectsPage({
       </div>
 
       {/* ── page header ── */}
-      <div style={{ padding: "80px 40px 56px", maxWidth: 1280, margin: "0 auto" }}>
+      <div style={{ padding: "100px 40px 56px", maxWidth: 1280, margin: "0 auto" }}>
         <Eyebrow label="Portfolio" />
         <div
           style={{
@@ -666,6 +689,42 @@ function Portfolio() {
       }, 300);
     }, 2600);
     return () => clearInterval(iv);
+  }, []);
+
+  /* section tracking */
+  useEffect(() => {
+    const handleScroll = () => {
+      const anchor = window.innerHeight * 0.45;
+      let currentSection = "Home";
+
+      NAV_ITEMS.forEach(({ label, href }) => {
+        if (!href.startsWith("#")) return;
+        const section = document.getElementById(href.slice(1));
+        if (!section) return;
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= anchor && rect.bottom >= anchor) {
+          currentSection = label;
+        }
+      });
+
+      const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+      const nearBottom = window.innerHeight + scrollTop >= scrollHeight - 80;
+
+      if (nearBottom && scrollTop > 60) {
+        currentSection = "Contact";
+      }
+
+      setActiveNav(currentSection);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
   }, []);
 
   /* ── LOADING SCREEN ── */
@@ -1094,80 +1153,98 @@ function Portfolio() {
           {/* ── Floating Navbar ── */}
           <nav
             style={{
-              position: "sticky",
-              top: 24,
+              position: "fixed",
+              top: 12,
+              left: 0,
+              right: 0,
+              width: "100%",
               zIndex: 50,
-              marginTop: 24,
               display: "flex",
-              alignItems: "center",
-              gap: 0,
-              background: "rgba(20,20,20,0.82)",
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
-              border: `1px solid ${C.border}`,
-              borderRadius: 9999,
-              padding: "6px 8px",
-              animation: "fadeUp 0.6s ease both",
+              justifyContent: "center",
+              background: "transparent",
+              padding: "10px 16px",
+              pointerEvents: "none",
             }}
           >
-            {/* logo badge */}
-            <GradientRing style={{ marginRight: 4 }}>
-              <div
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: "50%",
-                  background: C.bg,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: "'Instrument Serif', serif",
-                    fontStyle: "italic",
-                    fontSize: "13px",
-                    color: C.text,
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  AR
-                </span>
+            <div
+              style={{
+                width: "fit-content",
+                maxWidth: "calc(100% - 32px)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: 10,
+                background: "rgba(20,20,20,0.92)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: `1px solid ${C.border}`,
+                borderRadius: 9999,
+                padding: "10px 20px",
+                pointerEvents: "auto",
+                animation: "fadeUp 0.6s ease both",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+                {/* logo badge */}
+                <GradientRing style={{ marginRight: 4 }}>
+                  <div
+                    style={{
+                      width: 34,
+                      height: 34,
+                      borderRadius: "50%",
+                      background: C.bg,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: "'Instrument Serif', serif",
+                        fontStyle: "italic",
+                        fontSize: "13px",
+                        color: C.text,
+                        letterSpacing: "0.02em",
+                      }}
+                    >
+                      AR
+                    </span>
+                  </div>
+                </GradientRing>
+
+                <div style={{ width: 1, height: 20, background: C.border, margin: "0 6px" }} />
+
+                <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+                  {NAV_ITEMS.map(({ label, href }) => (
+                    <button
+                      key={label}
+                      className={`nav-btn ${activeNav === label ? "active" : "inactive"}`}
+                      onClick={() => {
+                        setActiveNav(label);
+                        if (href.startsWith("#")) {
+                          document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+                        } else {
+                          window.open(href, "_blank", "noopener");
+                        }
+                      }}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </GradientRing>
 
-            {/* divider */}
-            <div style={{ width: 1, height: 20, background: C.border, margin: "0 6px" }} />
-
-            {/* links */}
-            {([
-              { label: "Home",   href: "#hero" },
-              { label: "Work",   href: "#work" },
-              { label: "Resume", href: FIGMA_URL },
-            ] as const).map(({ label, href }) => (
-              <button
-                key={label}
-                className={`nav-btn ${activeNav === label ? "active" : "inactive"}`}
-                onClick={() => {
-                  setActiveNav(label);
-                  if (href.startsWith("#")) {
-                    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-                  } else {
-                    window.open(href, "_blank", "noopener");
-                  }
-                }}
+              <a
+                href="https://www.linkedin.com/in/anes-ragoub/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="say-hi"
+                style={{ textDecoration: "none" }}
               >
-                {label}
-              </button>
-            ))}
-
-            {/* divider */}
-            <div style={{ width: 1, height: 20, background: C.border, margin: "0 6px" }} />
-
-            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="say-hi" style={{ textDecoration: "none" }}>
-              Say hi <ArrowUpRight size={11} />
-            </a>
+                lets connect <ArrowUpRight size={11} />
+              </a>
+            </div>
           </nav>
 
           {/* ── Hero content ── */}
@@ -1413,6 +1490,7 @@ function Portfolio() {
 
         {/* ══ JOURNAL ═══════════════════════════════════════════════════════ */}
         <section
+          id="journal"
           style={{
             position: "relative",
             padding: "80px 40px 110px",
@@ -1534,6 +1612,7 @@ function Portfolio() {
 
         {/* ══ VISUAL EXPLORATIONS ═══════════════════════════════════════════ */}
         <section
+          id="visual"
           style={{
             position: "relative",
             padding: "100px 0 120px",
@@ -1761,6 +1840,7 @@ function Portfolio() {
 
         {/* ══ CONTACT / FOOTER ══════════════════════════════════════════════ */}
         <section
+          id="contact"
           style={{
             position: "relative",
             minHeight: "78vh",
@@ -1871,32 +1951,48 @@ function Portfolio() {
             >
               Available for freelance projects in UI/UX, social media design, and packaging.
             </p>
-            <GradientRing>
-              <button
-                style={{
-                  padding: "15px 34px",
-                  borderRadius: 9999,
-                  border: "none",
-                  background: "transparent",
-                  color: C.text,
-                  fontSize: "15px",
-                  fontFamily: "Inter, sans-serif",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                }}
-              >
-                <a
-                  href={LINKEDIN_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: "inherit", textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}
-                >
-                  Connect on LinkedIn <ArrowUpRight size={14} />
-                </a>
-              </button>
-            </GradientRing>
+            <div style={{ marginTop: 42, width: "100%", maxWidth: 920 }}>
+              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 14 }}>
+                {CONTACT_BUTTONS.map(({ label, href, Icon, color, glow }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 10,
+                      padding: "14px 22px",
+                      borderRadius: 9999,
+                      border: "1px solid #8A8A8A",
+                      color: C.text,
+                      background: "transparent",
+                      textDecoration: "none",
+                      fontSize: "14px",
+                      fontFamily: "Inter, sans-serif",
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 0 0 transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      const target = e.currentTarget as HTMLAnchorElement;
+                      target.style.borderColor = color;
+                      target.style.color = color;
+                      target.style.boxShadow = `0 0 24px ${glow}`;
+                    }}
+                    onMouseLeave={(e) => {
+                      const target = e.currentTarget as HTMLAnchorElement;
+                      target.style.borderColor = "#8A8A8A";
+                      target.style.color = C.text;
+                      target.style.boxShadow = "0 0 0 transparent";
+                    }}
+                  >
+                    <Icon size={16} />
+                    <span>{label}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* footer bar */}
@@ -1917,31 +2013,6 @@ function Portfolio() {
               © 2026 Anes Ragoub. All rights reserved.
             </span>
 
-            <div style={{ display: "flex", gap: 22, alignItems: "center", justifySelf: "center" }}>
-              {[
-                { Icon: Instagram, label: "Instagram", href: INSTAGRAM_URL },
-                { Icon: Linkedin,  label: "LinkedIn",  href: LINKEDIN_URL  },
-              ].map(({ Icon, label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={label}
-                  style={{
-                    color: C.muted,
-                    display: "flex",
-                    alignItems: "center",
-                    lineHeight: 0,
-                    transition: "color 0.2s",
-                  }}
-                  onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#C0C0C0")}
-                  onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = C.muted)}
-                >
-                  <Icon size={15} />
-                </a>
-              ))}
-            </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: 9, justifySelf: "end" }}>
               <div

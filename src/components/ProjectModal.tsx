@@ -36,7 +36,7 @@ export function ProjectModal({
 
       <div className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-[32px] border border-[#1F1F1F] bg-[#141414] text-[#F5F5F5] shadow-2xl" style={{ transform: 'translateZ(0)', contain: 'content' }}>
         <div className="max-h-[90vh] overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch', contain: 'content' }}>
-          <div className="mx-auto w-full max-w-5xl px-6 py-8 sm:px-8 sm:py-10 md:px-12">
+          <div className="mx-auto w-full max-w-5xl" style={{ padding: 20 }}>
             <div className="mb-6">
               <button
                 onClick={onClose}
@@ -58,10 +58,10 @@ export function ProjectModal({
             </div>
 
             {galleryImages.length > 0 ? (
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                {galleryImages.slice(0, 4).map((src: string, index: number) => (
+              <div className="mt-6 grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                {galleryImages.map((src: string, index: number) => (
                   <div key={`gallery-${index}`} className="overflow-hidden rounded-[20px] border border-[#1F1F1F] bg-[#141414]">
-                    <img src={src} alt={`${project.title} gallery ${index + 1}`} loading="lazy" decoding="async" className="h-52 w-full object-cover" />
+                    <img src={src} alt={`${project.title} gallery ${index + 1}`} loading="lazy" decoding="async" className="h-48 w-full object-cover md:h-56" />
                   </div>
                 ))}
               </div>
