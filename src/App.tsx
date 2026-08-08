@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowUpRight, ArrowLeft, Linkedin, Instagram, Globe, Figma, Download } from "lucide-react";
+import { ArrowUpRight, ArrowLeft, Linkedin, Instagram, Globe, Figma, Download, Menu, X } from "lucide-react";
 
 /* ─── constants ─────────────────────────────────────────────────────────── */
 
@@ -166,9 +166,11 @@ function SectionAccent({
 function ProjectCard({
   project,
   onOpen,
+  isMobile = false,
 }: {
   project: any;
   onOpen: () => void;
+  isMobile?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
 
@@ -183,9 +185,11 @@ function ProjectCard({
         position: "relative",
         background: C.surface,
         border: `1px solid ${C.border}`,
-        borderRadius: 24,
+        borderRadius: isMobile ? 18 : 24,
         overflow: "hidden",
-        minHeight: 400,
+        minHeight: isMobile ? 300 : 400,
+        height: isMobile ? 300 : undefined,
+        aspectRatio: isMobile ? "1 / 1" : undefined,
         cursor: "pointer",
       }}
     >
@@ -585,6 +589,8 @@ function Portfolio() {
   const [activeNav, setActiveNav] = useState("Home");
   const [roleIndex, setRoleIndex] = useState(0);
   const [roleVisible, setRoleVisible] = useState(true);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [isMobileLayout, setIsMobileLayout] = useState(false);
   
   const [allProjects, setAllProjects] = useState<any[]>([]);
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
@@ -689,6 +695,16 @@ function Portfolio() {
       }, 300);
     }, 2600);
     return () => clearInterval(iv);
+  }, []);
+
+  useEffect(() => {
+    const updateViewport = () => {
+      setIsMobileLayout(window.matchMedia("(max-width: 900px)").matches);
+    };
+
+    updateViewport();
+    window.addEventListener("resize", updateViewport);
+    return () => window.removeEventListener("resize", updateViewport);
   }, []);
 
   /* section tracking */
@@ -904,6 +920,118 @@ function Portfolio() {
           to   { opacity: 1; transform: translateY(0); }
         }
 
+        .portfolio-nav {
+          position: fixed;
+          top: 12px;
+          left: 0;
+          right: 0;
+          width: 100%;
+          z-index: 50;
+          display: flex;
+          justify-content: center;
+          background: transparent;
+          padding: 10px 16px;
+          pointer-events: none;
+        }
+
+        .portfolio-nav-shell {
+          width: fit-content;
+          max-width: calc(100% - 32px);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 10px;
+          background: rgba(20,20,20,0.92);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid #1F1F1F;
+          border-radius: 9999px;
+          padding: 10px 20px;
+          pointer-events: auto;
+          animation: fadeUp 0.6s ease both;
+        }
+
+        .portfolio-nav-brand {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .portfolio-nav-items {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
+        .portfolio-mobile-trigger {
+          display: none;
+          align-items: center;
+          justify-content: center;
+          width: 34px;
+          height: 34px;
+          border-radius: 9999px;
+          border: 1px solid #1F1F1F;
+          background: rgba(255,255,255,0.03);
+          color: #F5F5F5;
+          cursor: pointer;
+          padding: 0;
+        }
+
+        .portfolio-mobile-menu {
+          position: fixed;
+          top: 74px;
+          left: 16px;
+          z-index: 60;
+          width: min(300px, calc(100vw - 32px));
+          padding: 14px;
+          border-radius: 24px;
+          border: 1px solid rgba(255,255,255,0.12);
+          background: rgba(20,20,20,0.98);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.62), inset 0 0 28px rgba(255,255,255,0.06);
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .portfolio-mobile-menu .panel-title {
+          padding: 2px 2px 10px;
+          color: #878787;
+          font-size: 10px;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+        }
+
+        .portfolio-mobile-menu a,
+        .portfolio-mobile-menu button {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          padding: 12px 14px;
+          border-radius: 12px;
+          border: 1px solid #1F1F1F;
+          background: transparent;
+          color: #F5F5F5;
+          font-family: Inter, sans-serif;
+          font-size: 13px;
+          text-decoration: none;
+          cursor: pointer;
+          transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        }
+
+        .portfolio-mobile-menu a:hover,
+        .portfolio-mobile-menu button:hover {
+          border-color: transparent;
+          background: linear-gradient(#141414, #141414) padding-box,
+                      linear-gradient(135deg, #89AACC, #4E85BF) border-box;
+          transform: translateY(-1px);
+        }
+
         .nav-btn {
           padding: 6px 14px;
           border-radius: 9999px;
@@ -944,6 +1072,52 @@ function Portfolio() {
           background:
             linear-gradient(rgba(20,20,20,0.9), rgba(20,20,20,0.9)) padding-box,
             linear-gradient(135deg, #89AACC, #4E85BF) border-box;
+        }
+
+        @media (max-width: 900px) {
+          .portfolio-nav {
+            justify-content: flex-start;
+            padding: 0;
+            pointer-events: auto;
+          }
+
+          .portfolio-nav-shell {
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            width: fit-content;
+            max-width: calc(100vw - 24px);
+            justify-content: flex-start;
+            padding: 8px 12px;
+            border-radius: 20px;
+            flex-wrap: nowrap;
+          }
+
+          .portfolio-nav-brand {
+            gap: 4px;
+          }
+
+          .portfolio-nav-items {
+            display: none;
+          }
+
+          .portfolio-mobile-trigger {
+            display: inline-flex;
+          }
+
+          .portfolio-mobile-menu {
+            top: 72px;
+            left: 12px;
+            width: min(284px, calc(100vw - 24px));
+          }
+
+          .portfolio-nav .say-hi {
+            display: none;
+          }
+
+          .portfolio-nav-shell .gradient-ring {
+            margin-right: 4px;
+          }
         }
 
         .cta-fill {
@@ -1025,6 +1199,15 @@ function Portfolio() {
           border-color: #2a2a2a;
         }
 
+        .journal-excerpt {
+          color: #878787;
+          font-size: 13px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          display: block;
+        }
+
         .gallery-img {
           width: 100%;
           height: 100%;
@@ -1104,6 +1287,16 @@ function Portfolio() {
           .journal-pill { border-radius: 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
           .journal-pill img { width: 100% !important; height: 180px !important; }
           .journal-pill > div:last-child { text-align: left !important; width: 100%; }
+          .journal-excerpt {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            white-space: normal;
+            line-height: 1.55;
+            width: 100%;
+          }
+          .bento-row > div { min-height: 300px !important; height: 300px !important; aspect-ratio: 1 / 1 !important; }
+          .bento-sub-row > div { min-height: 300px !important; height: 300px !important; aspect-ratio: 1 / 1 !important; }
           .all-projects-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
@@ -1151,42 +1344,18 @@ function Portfolio() {
           </div>
 
           {/* ── Floating Navbar ── */}
-          <nav
-            style={{
-              position: "fixed",
-              top: 12,
-              left: 0,
-              right: 0,
-              width: "100%",
-              zIndex: 50,
-              display: "flex",
-              justifyContent: "center",
-              background: "transparent",
-              padding: "10px 16px",
-              pointerEvents: "none",
-            }}
-          >
-            <div
-              style={{
-                width: "fit-content",
-                maxWidth: "calc(100% - 32px)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: 10,
-                background: "rgba(20,20,20,0.92)",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                border: `1px solid ${C.border}`,
-                borderRadius: 9999,
-                padding: "10px 20px",
-                pointerEvents: "auto",
-                animation: "fadeUp 0.6s ease both",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
-                {/* logo badge */}
+          <nav className="portfolio-nav">
+            <div className="portfolio-nav-shell">
+              <div className="portfolio-nav-brand">
+                <button
+                  className="portfolio-mobile-trigger"
+                  aria-label={mobileNavOpen ? "Close navigation" : "Open navigation"}
+                  aria-expanded={mobileNavOpen}
+                  onClick={() => setMobileNavOpen((value) => !value)}
+                >
+                  {mobileNavOpen ? <X size={16} /> : <Menu size={16} />}
+                </button>
+
                 <GradientRing style={{ marginRight: 4 }}>
                   <div
                     style={{
@@ -1215,7 +1384,7 @@ function Portfolio() {
 
                 <div style={{ width: 1, height: 20, background: C.border, margin: "0 6px" }} />
 
-                <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+                <div className="portfolio-nav-items">
                   {NAV_ITEMS.map(({ label, href }) => (
                     <button
                       key={label}
@@ -1246,6 +1415,33 @@ function Portfolio() {
               </a>
             </div>
           </nav>
+
+          {mobileNavOpen && (
+            <div className="portfolio-mobile-menu">
+              <div className="panel-title">Navigation</div>
+              {NAV_ITEMS.map(({ label, href }) => (
+                <button
+                  key={label}
+                  onClick={() => {
+                    setActiveNav(label);
+                    setMobileNavOpen(false);
+                    if (href.startsWith("#")) {
+                      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+                    } else {
+                      window.open(href, "_blank", "noopener");
+                    }
+                  }}
+                >
+                  <span>{label}</span>
+                  <ArrowUpRight size={12} />
+                </button>
+              ))}
+              <a href="https://www.linkedin.com/in/anes-ragoub/" target="_blank" rel="noopener noreferrer">
+                <span>lets connect</span>
+                <ArrowUpRight size={12} />
+              </a>
+            </div>
+          )}
 
           {/* ── Hero content ── */}
           <div
@@ -1469,22 +1665,31 @@ function Portfolio() {
           {/* bento layout */}
           <div
             className="bento-row"
-            style={{ display: "grid", gridTemplateColumns: "7fr 5fr", gap: 16 }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: featuredProjects.length <= 1 ? "minmax(0, 1fr)" : "7fr 5fr",
+              gap: 16,
+            }}
           >
-            <ProjectCard project={featuredProjects[0]} onOpen={() => setSelectedProject(featuredProjects[0])} />
-            <ProjectCard project={featuredProjects[1]} onOpen={() => setSelectedProject(featuredProjects[1])} />
-            <div
-              className="bento-sub-row"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "5fr 7fr",
-                gridColumn: "1 / -1",
-                gap: 16,
-              }}
-            >
-              <ProjectCard project={featuredProjects[2]} onOpen={() => setSelectedProject(featuredProjects[2])} />
-              <ProjectCard project={featuredProjects[3]} onOpen={() => setSelectedProject(featuredProjects[3])} />
-            </div>
+            <ProjectCard project={featuredProjects[0]} onOpen={() => setSelectedProject(featuredProjects[0])} isMobile={isMobileLayout} />
+            {featuredProjects.length > 1 && (
+              <ProjectCard project={featuredProjects[1]} onOpen={() => setSelectedProject(featuredProjects[1])} isMobile={isMobileLayout} />
+            )}
+
+            {featuredProjects.length > 2 && (
+              <div
+                className="bento-sub-row"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "5fr 7fr",
+                  gridColumn: "1 / -1",
+                  gap: 16,
+                }}
+              >
+                <ProjectCard project={featuredProjects[2]} onOpen={() => setSelectedProject(featuredProjects[2])} isMobile={isMobileLayout} />
+                <ProjectCard project={featuredProjects[3]} onOpen={() => setSelectedProject(featuredProjects[3])} isMobile={isMobileLayout} />
+              </div>
+            )}
           </div>
         </section>
 
@@ -1576,15 +1781,7 @@ function Portfolio() {
                     >
                       {entry.title}
                     </div>
-                    <div
-                      style={{
-                        color: C.muted,
-                        fontSize: "13px",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
+                    <div className="journal-excerpt">
                       {entry.excerpt}
                     </div>
                   </div>
@@ -2002,19 +2199,38 @@ function Portfolio() {
               position: "relative",
               zIndex: 10,
               borderTop: `1px solid ${C.border}`,
-              display: "grid",
-              gridTemplateColumns: "1fr auto 1fr",
+              display: "flex",
               alignItems: "center",
+              justifyContent: "space-between",
               padding: "20px 40px",
               gap: 14,
+              flexWrap: "nowrap",
+              overflow: "hidden",
             }}
           >
-            <span style={{ color: C.muted, fontSize: "12px", fontFamily: "Inter, sans-serif" }}>
+            <span
+              style={{
+                color: C.muted,
+                fontSize: "12px",
+                fontFamily: "Inter, sans-serif",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
               © 2026 Anes Ragoub. All rights reserved.
             </span>
 
-
-            <div style={{ display: "flex", alignItems: "center", gap: 9, justifySelf: "end" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 9,
+                justifySelf: "end",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
+              }}
+            >
               <div
                 style={{
                   width: 7,
