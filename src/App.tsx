@@ -1277,12 +1277,42 @@ function Portfolio() {
           .bento-row { grid-template-columns: 1fr !important; }
           .bento-sub-row { grid-template-columns: 1fr !important; grid-column: 1 !important; }
           .hero-name { font-size: clamp(52px, 12vw, 80px) !important; }
-          .footer-bar { flex-direction: column; gap: 16px; align-items: center; text-align: center; }
           .stats-row { flex-direction: column !important; }
           .stat-col { border-right: none !important; border-bottom: 1px solid #1F1F1F; padding: 40px 24px !important; }
           .stat-col:last-child { border-bottom: none; }
           .section-header { flex-direction: column; align-items: flex-start !important; gap: 20px; }
-          .gallery-cols { display: none !important; }
+          #hero {
+            min-height: auto !important;
+          }
+          #visual {
+            min-height: auto !important;
+            padding: 65px 0 76px !important;
+          }
+          #contact {
+            min-height: auto !important;
+            padding-bottom: 26px !important;
+          }
+          .gallery-cols {
+            display: grid !important;
+            grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) !important;
+            gap: 10px !important;
+            padding: 0 !important;
+            inset: -8% !important;
+            width: 116% !important;
+            height: 116% !important;
+            transform: none !important;
+            transform-origin: center;
+            opacity: 1 !important;
+            overflow: hidden;
+          }
+          .gallery-cols > div {
+            margin-top: 0 !important;
+            gap: 10px !important;
+          }
+          .gallery-cols .gallery-card {
+            min-height: 170px !important;
+            flex: 1 1 auto !important;
+          }
           .gallery-center { position: relative !important; padding: 80px 24px !important; }
           .journal-pill { border-radius: 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
           .journal-pill img { width: 100% !important; height: 180px !important; }
@@ -1458,19 +1488,6 @@ function Portfolio() {
               animation: "fadeUp 0.9s ease 0.15s both",
             }}
           >
-            <span
-              style={{
-                color: C.muted,
-                fontSize: "11px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                marginBottom: 32,
-                display: "block",
-              }}
-            >
-              Collection &apos;26
-            </span>
-
             <h1
               className="hero-name"
               style={{
@@ -2192,60 +2209,6 @@ function Portfolio() {
             </div>
           </div>
 
-          {/* footer bar */}
-          <div
-            className="footer-bar"
-            style={{
-              position: "relative",
-              zIndex: 10,
-              borderTop: `1px solid ${C.border}`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "20px 40px",
-              gap: 14,
-              flexWrap: "nowrap",
-              overflow: "hidden",
-            }}
-          >
-            <span
-              style={{
-                color: C.muted,
-                fontSize: "12px",
-                fontFamily: "Inter, sans-serif",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
-              © 2026 Anes Ragoub. All rights reserved.
-            </span>
-
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 9,
-                justifySelf: "end",
-                whiteSpace: "nowrap",
-                flexShrink: 0,
-              }}
-            >
-              <div
-                style={{
-                  width: 7,
-                  height: 7,
-                  borderRadius: "50%",
-                  background: "#4ADE80",
-                  animation: "greenPulse 2.2s ease infinite",
-                  flexShrink: 0,
-                }}
-              />
-              <span style={{ color: C.muted, fontSize: "12px", fontFamily: "Inter, sans-serif" }}>
-                Available for projects
-              </span>
-            </div>
-          </div>
         </section>
       </div>
     </>

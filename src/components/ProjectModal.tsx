@@ -84,7 +84,7 @@ export function ProjectModal({
             </div>
 
             {project.links && project.links.length > 0 ? (
-              <div className="mt-8 rounded-[20px] border border-[#1F1F1F] bg-[#0F0F0F] p-4 sm:p-5">
+              <div className="mt-8 rounded-[20px] border border-transparent p-4 sm:p-5" style={{ background: 'transparent' }}>
                 <div className="mb-3 text-[11px] uppercase tracking-[0.24em] text-[#878787]">
                   Links
                 </div>
@@ -98,7 +98,8 @@ export function ProjectModal({
                         href={link.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full border border-[#1F1F1F] px-4 py-2 text-[13px] text-[#F5F5F5] transition hover:border-[#4E85BF] hover:text-[#89AACC]"
+                        className="inline-flex min-w-[172px] items-center justify-center gap-2 rounded-full border border-[#1F1F1F] bg-transparent px-5 py-3 text-[13px] text-[#F5F5F5] transition hover:border-[#4E85BF] hover:text-[#89AACC]"
+                        style={{ minHeight: 44 }}
                       >
                         <Icon size={14} />
                         <span>{link.label || link.url}</span>
