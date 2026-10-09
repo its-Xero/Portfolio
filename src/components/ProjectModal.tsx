@@ -34,8 +34,7 @@ export function ProjectModal({
     >
       <div className="absolute inset-0 bg-[#0A0A0A]/95" onClick={onClose} />
 
-      <div className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-[32px] border border-[#1F1F1F] bg-[#141414] text-[#F5F5F5] shadow-2xl" style={{ transform: 'translateZ(0)', contain: 'content' }}>
-        <div className="max-h-[90vh] overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch', contain: 'content' }}>
+      <div className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[32px] border border-[#1F1F1F] bg-[#141414] text-[#F5F5F5] shadow-2xl">
           <div className="mx-auto w-full max-w-5xl" style={{ padding: 20 }}>
             <div className="mb-6">
               <button
@@ -51,8 +50,6 @@ export function ProjectModal({
               <img
                 src={project.image}
                 alt={project.alt || project.title}
-                loading="lazy"
-                decoding="async"
                 className="h-64 w-full object-cover sm:h-80 md:h-[28rem]"
               />
             </div>
@@ -61,7 +58,7 @@ export function ProjectModal({
               <div className="mt-6 grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {galleryImages.map((src: string, index: number) => (
                   <div key={`gallery-${index}`} className="overflow-hidden rounded-[20px] border border-[#1F1F1F] bg-[#141414]">
-                    <img src={src} alt={`${project.title} gallery ${index + 1}`} loading="lazy" decoding="async" className="h-48 w-full object-cover md:h-56" />
+                    <img src={src} alt={`${project.title} gallery ${index + 1}`} className="h-48 w-full object-cover md:h-56" />
                   </div>
                 ))}
               </div>
@@ -110,7 +107,6 @@ export function ProjectModal({
               </div>
             ) : null}
           </div>
-        </div>
       </div>
     </div>
   );
