@@ -561,7 +561,7 @@ export default function Admin() {
                               return next;
                             });
                             if (currentProject.gallery_images?.[index]) {
-                              setCurrentProject(prev => ({
+                              setCurrentProject((prev: any) => ({
                                 ...prev,
                                 gallery_images: prev.gallery_images?.filter((_: any, i: number) => i !== index) || [],
                               }));
